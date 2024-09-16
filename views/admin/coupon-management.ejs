@@ -1,0 +1,331 @@
+<%- include('../layouts/adminheader.ejs') %>
+
+  <div class="col-lg-12 " style="background-color: #fff6f4;">
+
+    <div class="container pt-3">
+      <div class="row">
+        <div class="col-lg-9">
+          <h3>Coupon Mnagement</h3>
+        </div>
+        <div class="col-lg-3">
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Form to Create Coupon -->
+  <div class="container mt-5">
+    <div class="card mb-5">
+      <div class="card-header" style="background-color: #204f38;">
+        <h4 class="text-white">Create New Coupon</h4>
+      </div>
+      <div class="card-body">
+        <form id="createCouponForm" method="POST" action="/admin/coupons">
+          <div class="mb-3">
+            <label for="code" class="form-label">Coupon Code</label>
+            <input type="text" class="form-control" id="code" name="code">
+          </div>
+          <div class="mb-3">
+            <label for="discount" class="form-label">Discount (%)</label>
+            <input type="number" class="form-control" id="discount" name="discount">
+          </div>
+          <div class="mb-3">
+            <label for="maxDiscount" class="form-label">Maximum Discount (Currency)</label>
+            <input type="number" class="form-control" id="maxDiscount" name="maxDiscount">
+          </div>
+          <div class="mb-3">
+            <label for="expirationDate" class="form-label">Expiration Date</label>
+            <input type="date" class="form-control" id="expirationDate" name="expirationDate">
+          </div>
+          <div class="row justify-content-center">
+            <div class="col-auto">
+              <button type="submit" class="btn text-white" style="background-color: #204f38;">Create Coupon</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+    </div>
+
+    <div class="card">
+      <div class="card-header ">
+        <div style="background-color: #204f38;">
+          <h4 class="text-white p-3">Coupons</h4>
+        </div>
+        <hr>
+        <form id="searchForm" class="form-inline d-flex justify-content-center mt-2">
+          <input type="text" id="searchInput" name="search" value="<%= searchQuery %>"
+            placeholder="Search by coupon code" class="form-control" />
+        </form>
+
+        <p class="mt-2 text-center  text-dark">Total Coupons: <%= totalCount %>
+        </p>
+      </div>
+      <div class="card-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>
+                <a class="text-dark"
+                  href="?search=<%= searchQuery %>&sortField=code&sortOrder=<%= sortField === 'code' && sortOrder === 'asc' ? 'desc' : 'asc' %>">
+                  Coupon Code
+                  <i
+                    class="fa <%= sortField === 'code' ? (sortOrder === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort' %>"></i>
+                </a>
+              </th>
+              <th>
+                <a class="text-dark"
+                  href="?search=<%= searchQuery %>&sortField=discount&sortOrder=<%= sortField === 'discount' && sortOrder === 'asc' ? 'desc' : 'asc' %>">
+                  Discount (%)
+                  <i
+                    class="fa <%= sortField === 'discount' ? (sortOrder === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort' %>"></i>
+                </a>
+              </th>
+              <th>
+                <a class="text-dark"
+                  href="?search=<%= searchQuery %>&sortField=maxDiscount&sortOrder=<%= sortField === 'maxDiscount' && sortOrder === 'asc' ? 'desc' : 'asc' %>">
+                  Maximum Discount
+                  <i
+                    class="fa <%= sortField === 'maxDiscount' ? (sortOrder === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort' %>"></i>
+                </a>
+              </th>
+              <th>
+                <a class="text-dark"
+                  href="?search=<%= searchQuery %>&sortField=expirationDate&sortOrder=<%= sortField === 'expirationDate' && sortOrder === 'asc' ? 'desc' : 'asc' %>">
+                  Expiration Date
+                  <i
+                    class="fa <%= sortField === 'expirationDate' ? (sortOrder === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort' %>"></i>
+                </a>
+              </th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% coupons.forEach(coupon=> {
+              const isExpired = new Date(coupon.expirationDate) < new Date(); %>
+                <tr>
+                  <td>
+                    <%= coupon.code %>
+                  </td>
+                  <td>
+                    <%= coupon.discount %>
+                  </td>
+                  <td>
+                    <%= coupon.maxDiscount%>
+                  </td>
+                  <td>
+                    <%= new Date(coupon.expirationDate).toDateString() %>
+                  </td>
+                  <td>
+                    <span class="badge <%= isExpired ? 'bg-danger' : 'bg-success' %>">
+                      <%= isExpired ? 'Expired' : 'Active' %>
+                    </span>
+                  </td>
+                  <td>
+                    <i class="fa fa-trash delete-coupon" style="color: red;" data-id="<%= coupon._id %>"
+                      title="Delete Coupon"></i>
+                  </td>
+                </tr>
+                <% }) %>
+          </tbody>
+        </table>
+        <!-- Pagination Controls -->
+        <div class="pagination-container">
+          <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+              <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                <a class="page-link"
+                  href="?page=<%= currentPage - 1 %>&limit=<%= limit %>&search=<%= searchQuery %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %>"
+                  aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <% for(let i=1; i <=totalPages; i++) { %>
+                <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                  <a class="page-link"
+                    href="?page=<%= i %>&limit=<%= limit %>&search=<%= searchQuery %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %>">
+                    <%= i %>
+                  </a>
+                </li>
+                <% } %>
+                  <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                    <a class="page-link"
+                      href="?page=<%= currentPage + 1 %>&limit=<%= limit %>&search=<%= searchQuery %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %>"
+                      aria-label="Next">
+                      <span aria-hidden="true">&raquo;</span>
+                    </a>
+                  </li>
+            </ul>
+          </nav>
+        </div>
+
+      </div>
+    </div>
+
+
+  </div>
+
+  <!-- Include SweetAlert2 library -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+  <script>
+    document.getElementById('createCouponForm').addEventListener('submit', function (event) {
+      event.preventDefault(); // Prevent the default form submission
+
+      const formData = new FormData(this);
+      const couponCode = formData.get('code');
+      const discount = formData.get('discount');
+      const maximumDiscount = formData.get('maxDiscount');
+      const expirationDate = formData.get('expirationDate');
+
+      let errors = [];
+
+      // Validate coupon code
+      if (!couponCode || couponCode.length < 3) {
+        errors.push('Coupon code must be at least 3 characters long.');
+      }
+
+      // Validate discount
+      if (!discount || isNaN(discount) || discount < 1 || discount > 100) {
+        errors.push('Discount must be a number between 1 and 100.');
+      }
+
+      // Validate maximumDiscount
+      if (!maximumDiscount || isNaN(maximumDiscount)) {
+        errors.push('Enter a valid Maximum Discount Amount.');
+      }
+
+      // Validate expiration date
+      if (expirationDate) {
+        const expDate = new Date(expirationDate);
+        if (isNaN(expDate.getTime()) || expDate < new Date()) {
+          errors.push('Expiration date must be on or after the current date.');
+        }
+      }
+
+      // If errors exist, show SweetAlert with errors
+      if (errors.length > 0) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Validation Errors',
+          html: errors.join('<br>'),
+          confirmButtonColor: 'red' // Display errors
+        });
+      } else {
+        // Show confirmation alert
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "Do you want to create this coupon?",
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: '#204f38',
+          confirmButtonText: 'Yes, create it!',
+          cancelButtonColor: 'blanchedalmond',
+          cancelButtonText: '<span style="color:black;">No, Cancel</span>'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Proceed with form submission
+            const data = new URLSearchParams(formData).toString();
+
+            fetch(this.action, {
+              method: this.method,
+              body: data,
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+              }
+            })
+              .then(response => response.json())
+              .then(data => {
+                if (data.errors) {
+                  // Display validation errors from server
+                  let errorMessage = 'Validation errors:';
+                  data.errors.forEach(error => {
+                    errorMessage += `<br>${error.msg}`;
+                  });
+                  Swal.fire({
+                    title: 'Error',
+                    html: errorMessage,
+                    icon: 'error'
+                  });
+                } else if (data.message) {
+                  // Display success or error message
+                  Swal.fire({
+                    title: data.message,
+                    icon: data.message.includes('successfully') ? 'success' : 'error',
+                    confirmButtonColor: '#204f38'
+                  }).then(() => {
+                    if (data.message.includes('successfully')) {
+                      window.location.reload(); // Reload the page on success
+                    }
+                  });
+                }
+              })
+              .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                  title: 'Error',
+                  text: 'An unexpected error occurred.',
+                  icon: 'error'
+                });
+              });
+          }
+        });
+      }
+    });
+
+    document.querySelectorAll('.delete-coupon').forEach(button => {
+      button.addEventListener('click', function () {
+        const id = this.getAttribute('data-id');
+
+        Swal.fire({
+          title: 'Are you sure?',
+          text: 'Do you really want to delete this coupon?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#204f38',
+
+          confirmButtonColor: '#204f38',
+          cancelButtonText: '<span style="color:black;">No, keep it</span>',
+          cancelButtonColor: 'blanchedalmond',
+          confirmButtonText: 'Yes, delete it!',
+
+        }).then((result) => {
+          if (result.isConfirmed) {
+            fetch(`/admin/coupons/${id}`, {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest' // This header is important for identifying AJAX requests
+              }
+            })
+              .then(response => response.json())
+              .then(data => {
+                if (data.message) {
+                  Swal.fire({
+                    icon: 'success',
+                    title: 'Deleted!',
+                    text: 'The coupon has been deleted successfully.',
+                    confirmButtonColor: '#204f38',
+                    confirmButtonText: 'OK'
+                  })
+                    .then(() => {
+                      window.location.reload();
+                    });
+                } else {
+                  Swal.fire('Error', 'Coupon could not be deleted.', 'error');
+                }
+              })
+              .catch(error => {
+                console.error('Error:', error);
+                Swal.fire('Error', 'An unexpected error occurred.', 'error');
+              });
+          }
+        });
+      });
+    });
+
+  </script>
+
+  <%- include('../layouts/footer.ejs') %>

@@ -1,0 +1,405 @@
+<%- include('../layouts/adminheader.ejs') %>
+  <div class="col-lg-12">
+    <div class="col-lg-12" style="background-color: #fff6f4;">
+      <div class="container pt-3">
+        <div class="row">
+          <div class="col-lg-9">
+            <h3>Categories</h3>
+          </div>
+          <div class="col-lg-3">
+            <input type="text" id="categorySearch" placeholder="Search Category..." onkeyup="searchCategory()"
+              style="width: 70%; padding: 5px; margin-bottom: 20px;">
+            <!-- Button to Open the Modal -->
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col-9"></div>
+      <div class="col-3"><button type="button" class="btn text-white" style="background-color: #204f38;"
+          data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+          <i class="fa-solid fa-plus text-white" title="Add Category"></i> Add Category
+        </button></div>
+    </div>
+
+    <nav class="container py-4">
+      <table class="table table-striped">
+        <thead class="tablehead">
+          <tr>
+            <th scope="col-2">No</th>
+            <th scope="col-4">Name</th>
+            <th scope="col-3">Status</th>
+            <th scope="col-3">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (categories.length> 0) { %>
+            <% categories.forEach((category, index)=> { %>
+              <tr>
+                <td scope="row">
+                  <%= (currentPage - 1) * limit + index + 1 %>
+                </td>
+                <td>
+                  <%= category.name %>
+                </td>
+                <td>
+                  <%= category.status ? 'Listed' : 'Unlisted' %>
+                </td>
+                <td>
+                  <%if(category.status){%>
+                    <a href="#" onclick="confirmUnListCategory('<%= category._id %>')" title="Unlist Category">
+                      <i class="fa-solid fa-circle-check" style="color: #204f38;;"></i>
+                    </a>
+                    <%}else{%>
+
+                      <a href="#" onclick="confirmListCategory('<%= category._id %>')" title="List Category">
+                        <i class="fa-solid fa-ban" style="color: #FF003D;"></i>
+                      </a>
+                      <%}%>
+                        <a href="#" onclick="openEditCategoryModal('<%= category._id %>', '<%= category.name %>')"
+                          title="Edit Category">
+                          <i class="fa-solid fa-pen-to-square" style="color: #FF003D;"></i>
+                        </a>
+                </td>
+              </tr>
+              <% }); %>
+                <% } else { %>
+                  <tr>
+                    <td colspan="5">Category Not found</td>
+                  </tr>
+                  <% } %>
+        </tbody>
+      </table>
+    </nav>
+
+    <!-- Pagination -->
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+          <a class="page-link" href="?page=<%= currentPage - 1 %>&limit=<%= limit %>">Previous</a>
+        </li>
+        <% for (let i=1; i <=totalPages; i++) { %>
+          <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+            <a class="page-link" href="?page=<%= i %>&limit=<%= limit %>">
+              <%= i %>
+            </a>
+          </li>
+          <% } %>
+            <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+              <a class="page-link" href="?page=<%= currentPage + 1 %>&limit=<%= limit %>">Next</a>
+            </li>
+      </ul>
+    </nav>
+
+    <!-- Add Category Modal -->
+    <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addCategoryModalLabel"><strong>Add Category</strong></h5>
+            <a class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+              style="cursor: pointer; color: rgb(16, 16, 16); width: 30px; height: 30px; font-size: 16px;">X</a>
+          </div>
+          <div class="modal-body">
+            <form id="addCategoryForm" method="post">
+
+              <div class="mb-3">
+                <label for="categoryName" class="form-label">Category Name</label>
+                <input type="text" class="form-control" id="categoryName" name="name">
+              </div>
+              <div id="form-errors" class="text-danger"></div>
+              <div class="modal-footer">
+                <button type="button" class="btn " style="background-color: blanchedalmond; border-color: #204f38;"
+                  data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn text-white" style="background-color: #204f38;">Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Category Modal -->
+    <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editCategoryModalLabel"><strong>Edit Category</strong> </h5>
+            <a class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+              style="cursor: pointer; color: rgb(16, 16, 16); width: 30px; height: 30px; font-size: 16px;">X</a>
+          </div>
+          <div class="modal-body">
+            <form id="editCategoryForm" method="post">
+              <div class="mb-3">
+                <label for="editCategoryName" class="form-label">Category Name</label>
+                <input type="text" class="form-control" id="editCategoryName" name="name">
+              </div>
+              <input type="hidden" id="editCategoryId" name="id">
+              <div id="editFormErrors" class="text-danger"></div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn " style="background-color: blanchedalmond; border-color: #204f38;"
+              data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" style="background-color: #204f38;"
+              id="saveEditCategory">Update</button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.getElementById('addCategoryForm').addEventListener('submit', function (event) {
+        event.preventDefault();  // Prevent form submission
+
+        // Clear previous validation errors
+        document.getElementById('form-errors').innerHTML = '';
+
+        const name = document.getElementById('categoryName').value;
+
+        // Make an AJAX request to validate the category name
+        fetch('/admin/add-category', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name }),
+        })
+          .then(response => response.json())
+          .then(result => {
+            if (result.errors) {
+              // Display backend validation errors immediately
+              document.getElementById('form-errors').innerHTML = result.errors.name.msg;
+            } else {
+              // If no validation errors, show the confirmation alert
+              Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to add this category?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#204f38',
+                cancelButtonColor: 'blanchedalmond',
+                confirmButtonText: 'Yes, add it!',
+                cancelButtonText: '<span style="color:black;">Cancel</span>',  // Set cancel button text color to black
+              })
+                .then((result) => {
+                  if (result.isConfirmed) {
+                    // Proceed with adding the category if confirmed
+                    fetch('/admin/add-category', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ name })
+                    })
+                      .then(response => response.json())
+                      .then(result => {
+
+                        // Success alert
+                        Swal.fire({
+                          title: 'Success!',
+                          text: 'Category added successfully.',
+                          icon: 'success',
+                          confirmButtonColor: '#204f38',
+                        }).then(() => {
+                          location.reload();  // Reload the page to update the category list
+                        });
+
+                      })
+                      .catch(error => {
+                        console.error('Error:', error);
+                      });
+                  }
+                });
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      });
+
+      // Clear validation errors when the modal is hidden or reopened
+      document.getElementById('addCategoryModal').addEventListener('hidden.bs.modal', function () {
+        document.getElementById('form-errors').innerHTML = '';
+        document.getElementById('categoryName').value = ''; // Optionally clear the input field too
+      });
+    </script>
+
+    <script>
+      function confirmUnListCategory(categoryId) {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: 'Do you really want to unlist this category?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#204f38',
+          cancelButtonColor: 'blanchedalmond',
+          confirmButtonText: 'Yes, unlist it!',
+          cancelButtonText: '<span style="color:black;">Cancel</span>',  // Set cancel button text color to black
+
+        }).then((result) => {
+          if (result.isConfirmed) {
+
+            // Success alert after confirming
+            Swal.fire({
+              title: 'Success!',
+              text: 'Category has been unlisted successfully.',
+              icon: 'success',
+              confirmButtonColor: '#204f38',
+
+            }).then(() => {
+              window.location.href = `/admin/toggle-category-status/${categoryId}`;
+            });
+          }
+        });
+      }
+
+      function confirmListCategory(categoryId) {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: 'Do you really want to list this category?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#204f38',
+          cancelButtonColor: 'blanchedalmond',
+          confirmButtonText: 'Yes, list it!',
+          cancelButtonText: '<span style="color:black;">Cancel</span>',  // Set cancel button text color to black
+
+        }).then((result) => {
+          if (result.isConfirmed) {
+
+            // Success alert after confirming
+            Swal.fire({
+              title: 'Success!',
+              text: 'Category has been listed successfully.',
+              icon: 'success',
+              confirmButtonColor: '#204f38',
+
+            }).then(() => {
+              window.location.href = `/admin/toggle-category-status/${categoryId}`;
+            });;
+          }
+        });
+      }
+
+
+    </script>
+    <script>
+      function searchCategory() {
+        const input = document.getElementById("categorySearch");
+        const filter = input.value.toLowerCase();
+        const table = document.querySelector("table");
+        const tr = table.getElementsByTagName("tr");
+
+        for (let i = 1; i < tr.length; i++) {
+          const td = tr[i].getElementsByTagName("td");
+          let found = false;
+
+          for (let j = 0; j < td.length; j++) {
+            if (td[j]) {
+              if (td[j].textContent.toLowerCase().indexOf(filter) > -1) {
+                found = true;
+                break;
+              }
+            }
+          }
+
+          if (found) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    </script>
+    <script>
+      function openEditCategoryModal(id, name) {
+        // Clear previous validation errors
+        document.getElementById('editFormErrors').innerHTML = '';
+
+        // Set the form values
+        document.getElementById('editCategoryId').value = id;
+        document.getElementById('editCategoryName').value = name;
+
+        // Open the modal
+        var myModal = new bootstrap.Modal(document.getElementById('editCategoryModal'));
+        myModal.show();
+      }
+
+      // Clear validation errors when modal is closed
+      document.getElementById('editCategoryModal').addEventListener('hidden.bs.modal', function () {
+        document.getElementById('editFormErrors').innerHTML = '';
+      });
+
+      document.getElementById('saveEditCategory').addEventListener('click', function (event) {
+        event.preventDefault(); // Prevent default form submission
+
+        const categoryId = document.getElementById('editCategoryId').value;
+        const categoryName = document.getElementById('editCategoryName').value;
+
+        // Clear previous validation errors
+        document.getElementById('editFormErrors').innerHTML = '';
+
+        // Make an AJAX request to validate the data first (before confirmation)
+        fetch('/admin/update-category', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: categoryId, name: categoryName })
+        })
+          .then(response => response.json())
+          .then(result => {
+            if (result.errors) {
+              // Display backend validation errors
+              document.getElementById('editFormErrors').innerHTML = result.errors.name.msg;
+            } else {
+              // If no errors, proceed to show the confirmation dialog
+              Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to save the changes?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#204f38',
+                cancelButtonColor: 'blanchedalmond',
+                confirmButtonText: 'Yes, save it!',
+                cancelButtonText: '<span style="color:black;">Cancel</span>',  // Set cancel button text color to black
+
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  // Make the final AJAX request to update the category after confirmation
+                  fetch('/admin/update-category', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: categoryId, name: categoryName })
+                  })
+                    .then(response => response.json())
+                    .then(result => {
+                      if (result.errors) {
+                        // Display backend validation errors (if any)
+                        document.getElementById('editFormErrors').innerHTML = result.errors.name.msg;
+                      } else {
+                        // Success alert
+                        Swal.fire({
+                          title: 'Success!',
+                          text: 'Category updated successfully.',
+                          icon: 'success',
+                          confirmButtonColor: '#204f38'
+                        }).then(() => {
+                          location.reload();  // Reload the page to update the category list
+                        });
+                      }
+                    })
+                    .catch(error => {
+                      console.error('Error:', error);
+                    });
+                }
+              });
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      });
+    </script>
+
+
+    <%- include('../layouts/footer.ejs') %>

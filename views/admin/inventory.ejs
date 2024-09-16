@@ -1,0 +1,204 @@
+<%- include('../layouts/adminheader.ejs') %>
+
+  <div class="col-lg-12">
+    <div class="col-lg-12 " style="background-color: #fff6f4;">
+
+      <div class="container pt-3">
+        <div class="row">
+
+
+          <div class="col-lg-9">
+            <h3>Inventory Management</h3>
+
+          </div>
+          <div class="col-lg-3">
+            <input type="text" id="stockSearch" placeholder="Search..." onkeyup="searchStock()"
+              style="width: 70%; padding: 5px; margin-bottom: 20px;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Pagination Controls -->
+    <nav class="container py-4">
+
+
+
+      <table class="table table-striped">
+        <thead class="tablehead">
+          <tr>
+            <th scope="col" style="text-align: center;">Image</th>
+            <th scope="col" style="text-align: center;">Product Name</th>
+            <th scope="col" style="text-align: center;">Price</th>
+            <th scope="col" style="text-align: center;">Stock</th>
+            <th scope="col" style="text-align: center;">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="tablebody">
+          <% products.forEach(product=> { %>
+            <tr>
+              <!-- Image Column -->
+              <td style="text-align: center; vertical-align: middle;">
+                <% if (product.image && product.image.length> 0) { %>
+                  <img src="/images/<%= product.image[0] %>" alt="Product Image" style="width: 100px; height: auto;">
+                  <% } %>
+              </td>
+
+              <!-- Product Name Column -->
+              <td style="text-align: center; vertical-align: middle;">
+                <%= product.name %>
+              </td>
+
+              <!-- Price Column -->
+              <td style="text-align: center; vertical-align: middle;">₹<%= product.discountprice.toFixed(2) %>
+              </td>
+
+              <!-- Stock Column -->
+              <td style="text-align: center; vertical-align: middle;">
+                <%= product.stock %>
+              </td>
+
+              <!-- Actions Column -->
+              <td style="text-align: center; vertical-align: middle;">
+                <!-- Update Stock Form -->
+                <form action="/admin/update-stock" method="POST"
+                  class="d-flex align-items-center justify-content-center update-stock-form">
+                  <input type="number" name="stock" class="form-control mr-2" value="<%= product.stock %>" required
+                    style="width: 100px; text-align: center;">
+                  <input type="hidden" name="productId" value="<%= product._id %>">
+                  <button type="submit" class="btn text-white" style="background-color: #204f38;">Update</button>
+                </form>
+              </td>
+            </tr>
+            <% }) %>
+        </tbody>
+      </table>
+
+  </div>
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+      <% if (currentPage> 1) { %>
+        <li class="page-item">
+          <a class="page-link" href="/admin/inventory?page=<%= currentPage - 1 %>&limit=<%= limit %>"
+            aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        <% } %>
+          <% for (let i=1; i <=totalPages; i++) { %>
+            <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+              <a class="page-link" href="/admin/inventory?page=<%= i %>&limit=<%= limit %>">
+                <%= i %>
+              </a>
+            </li>
+            <% } %>
+              <% if (currentPage < totalPages) { %>
+                <li class="page-item">
+                  <a class="page-link" href="/admin/inventory?page=<%= currentPage + 1 %>&limit=<%= limit %>"
+                    aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+                <% } %>
+    </ul>
+  </nav>
+
+  <!-- SweetAlert for confirmation and success messages -->
+
+  <!-- Display Success and Error Messages -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const forms = document.querySelectorAll('.update-stock-form');
+
+      forms.forEach(form => {
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+
+          const formElement = this;
+          const productName = formElement.closest('tr').querySelector('td').innerText.trim();
+
+          Swal.fire({
+
+            title: 'Are you sure?',
+            text: `Do you want to update the stock for ${productName}?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#204f38',
+            confirmButtonText: 'Yes, update it!',
+            cancelButtonColor: 'blanchedalmond',
+            cancelButtonText: '<span style="color:black;">Cancel</span>',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              formElement.submit(); // Proceed with form submission if confirmed
+            }
+          });
+        });
+      });
+
+
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const successMessage = urlParams.get('success');
+      const errorMessage = urlParams.get('error');
+
+      if (successMessage) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: successMessage,
+          confirmButtonColor: '#204f38'
+        });
+      }
+
+
+      // Display validation errors if any
+      <% if (errors && errors.length > 0) { %>
+      
+        <% errors.forEach(error => { %>
+        Swal.fire({
+          icon: 'error',
+          title: 'Validation Error',
+          text: '<%= error.msg %>',
+          confirmButtonText: 'OK'
+        });
+        <% }) %>
+      
+      <% } %>
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+    });
+  </script>
+  <script>
+    function searchStock() {
+      const input = document.getElementById("stockSearch");
+      const filter = input.value.toLowerCase();
+      const table = document.querySelector("table");
+      const tr = table.getElementsByTagName("tr");
+
+      for (let i = 1; i < tr.length; i++) {
+        const td = tr[i].getElementsByTagName("td");
+        let found = false;
+
+        for (let j = 0; j < td.length; j++) {
+          if (td[j]) {
+            if (td[j].textContent.toLowerCase().indexOf(filter) > -1) {
+              found = true;
+              break;
+            }
+          }
+        }
+
+        if (found) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  </script>
+  <%- include('../layouts/footer.ejs') %>

@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Ogani Template">
+  <meta name="keywords" content="Ogani, unica, creative, html">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Green Casa</title>
+  <link rel="icon" type="image/x-icon" href="/images/greencasa.jpg">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+  <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="css/elegant-icons.css" type="text/css">
+  <link rel="stylesheet" href="css/nice-select.css" type="text/css">
+  <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css">
+  <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
+  <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
+  <link rel="stylesheet" href="css/style.css" type="text/css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css"
+    integrity="sha512-7r4j7uRdpM4ts7dmQDsafzMTZAL36E4YMcCCZbhq+FxkQth4k4T5k9o0z5KkHhZ+HPANmG9t7Ta3hdq0O+3FQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"
+    integrity="sha512-7z1jOrjOwvcT9QLxdtC5aNw20zomESBQUl3yziUX6LJXLoXzF4FWBF2UVDW4Uo1PjU8mTX5H0rbfrVFLsmoA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"
+    integrity="sha512-some-integrity-hash" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+  <!-- Pintura and FilePond Dependencies -->
+  <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+  <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
+  <link href="https://unpkg.com/pintura/dist/pintura.css" rel="stylesheet">
+
+  <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+  <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+  <script src="https://unpkg.com/pintura/dist/pintura.js"></script>
+  <script src="https://unpkg.com/filepond-plugin-image-edit/dist/filepond-plugin-image-edit.js"></script>
+
+  <style>
+    .form-group {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .error-container {
+      margin-left: 10px;
+    }
+
+    .error-text {
+      color: red;
+      font-size: 15px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .error-border {
+      border: 2px solid red;
+    }
+
+    .preview-image-container {
+      position: relative;
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    .preview-image-container img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+    }
+
+    .preview-image-container .close-icon {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: #fff;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .preview-image-container .close-icon:hover {
+      background: #f44336;
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header Section Begin -->
+  <header class="header">
+    <div class="header__top">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 col-md-6">
+            <div class="header__top__left">
+
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6">
+            <div class="header__top__right">
+              <div class="header__top__right__social">
+                <a href="#"><i class="fa fa-facebook"></i></a>
+                <a href="#"><i class="fa fa-twitter"></i></a>
+                <a href="#"><i class="fa fa-linkedin"></i></a>
+                <a href="#"><i class="fa fa-pinterest-p"></i></a>
+              </div>
+
+              <div class="header__top__right__auth">
+                <a href="/admin/logout" class="text-white"><i class="fa fa-user"></i>LogOut</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="background-color: blanchedalmond;">
+      <div class="container ">
+        <div class="row">
+          <div class="col-lg-2">
+            <div class="header__logo">
+              <a href="#" style="font-size: xx-large; color: green;"><i class="fa-solid fa-seedling"
+                  style="color: green;"></i><b>Green Casa</b></a>
+
+            </div>
+          </div>
+          <div class="col-lg-10 pt-3">
+
+
+            <nav class="header__menu ">
+              <ul>
+                <li><a href="/admin/home">DASHBOARD</a></li>
+                <li><a href="/admin/dashboard">COSTUMERS</a></li>
+
+                <li><a href="/admin/view-products">PRODUCTS</a></li>
+
+                <li><a href="/admin/view-category">CATEGORY</a></li>
+                <li><a href="/admin/view-orders">ORDERS</a></li>
+                <li><a href="/admin/inventory">INVENTORY</a></li>
+                <li><a href="/admin/profile">PROFILE</a></li>
+                <li><a href="/admin/offers">OFFER</a></li>
+                <li><a href="/admin/coupons">Coupon</a></li>
+                <li><a href="/admin/sales-report">SALES</a></li>
+
+              </ul>
+            </nav>
+
+          </div>
+
+        </div>
+        <!-- <div class="humberger__open">
+            <i class="fa fa-bars"></i>
+        </div> -->
+      </div>
+    </div>
+    <section class="vh-100" style="background-color: #ede8e9;">
+      <div class="row">
+        <div class="col">
+          <nav aria-label="breadcrumb" class=" rounded-3 p-3 mb-4 bg-white">
+            <ol class="breadcrumb mb-0">
+              <li class="breadcrumb-item"><a href="/admin/home">Home</a></li>
+              <li class="breadcrumb-item"><a href="/admin/view-products">Products</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Add product</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+      <div class="container">
+
+        <div class="row d-flex justify-content-center align-items-center ">
+
+          <div class="col col-xl-12">
+            <div class="card border border-success"
+              style="border-radius: 1rem; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);">
+              <form action="/admin/add-products" method="post" enctype="multipart/form-data">
+                <div style="background-color: #204f38;border-radius: 1rem 1rem 0rem  0rem;">
+                  <h4 class="text-uppercase text-center text-white py-2 mb-3">Add Product</h4>
+                </div>
+                <div class="row g-0">
+
+                  <!-- Image Upload Section -->
+                  <div class="col-md-4 col-lg-4 p-3">
+                    <div class="container text-center">
+
+                      <!-- Custom file input styling -->
+                      <div>
+                        <label for="images" class="form-label">Upload Product Images</label>
+
+                        <label for="images" class="btn"
+                          style="cursor: pointer; background-color: blanchedalmond; border-color: #204f38;">Upload
+                          Image</label>
+
+
+                        <input type="file" multiple="multiple" id="images" name="image" accept="image/*"
+                          onchange="previewImages()"
+                          class="form-control form-control-md <% if (errors && errors.image) { %> error-border <% } %>"
+                          style="display: none;" />
+                      </div>
+
+                      <div id="image-preview-container" class="d-flex flex-wrap mt-3" style="gap: 10px;"></div>
+
+                      <% if (errors && errors.image) { %>
+                        <p class="text-danger">
+                          <%= errors.image.msg %>
+                        </p>
+                        <% } %>
+                    </div>
+                  </div>
+
+                  <!-- Form Inputs Section -->
+                  <div class="col-md-8 col-lg-8 p-4">
+                    <div class="card-body p-4 text-black">
+
+                      <% if (typeof message !=='undefined' ) { %>
+                        <div class="alert alert-info text-center" role="alert">
+                          <%= message %>
+                        </div>
+                        <% } %>
+
+                          <!-- Product Name -->
+                          <div class="form-outline mb-3">
+                            <div class="row mb-1 align-items-center">
+                              <label class="form-label col-md-3" for="name">Name</label>
+                              <div class="col-md-9">
+                                <input type="text" id="name" name="name"
+                                  class="form-control form-control-md <% if (errors && errors.name) { %> is-invalid <% } %>" />
+                                <% if (errors && errors.name) { %>
+                                  <div class="invalid-feedback">
+                                    <%= errors.name.msg %>
+                                  </div>
+                                  <% } %>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- Product Description -->
+                          <div class="form-outline mb-3">
+                            <div class="row mb-1 align-items-center">
+                              <label class="form-label col-md-3" for="description">Description</label>
+                              <div class="col-md-9">
+                                <textarea id="description" name="description"
+                                  class="form-control form-control-md <% if (errors && errors.description) { %> is-invalid <% } %>"></textarea>
+                                <% if (errors && errors.description) { %>
+                                  <div class="invalid-feedback">
+                                    <%= errors.description.msg %>
+                                  </div>
+                                  <% } %>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- Category -->
+                          <div class="form-outline mb-3">
+                            <div class="row mb-1 align-items-center">
+                              <label class="form-label col-md-3" for="category">Category</label>
+                              <div class="col-md-9">
+                                <% if (category && typeof category==='string' ) { %>
+                                  <select name="category" class="form-select">
+                                    <option value="" disabled selected>Select Category</option>
+                                    <option value="<%= category %>">
+                                      <%= category %>
+                                    </option>
+                                  </select>
+                                  <% } else if (Array.isArray(category) && category.length> 0) { %>
+                                    <select name="category" class="form-select">
+                                      <option value="" disabled selected>Select Category</option>
+                                      <% category.forEach(cat=> { %>
+                                        <option value="<%= cat.name %>">
+                                          <%= cat.name %>
+                                        </option>
+                                        <% }) %>
+                                    </select>
+                                    <% } else { %>
+                                      <p class="text-danger">Category Not Found</p>
+                                      <% } %>
+                                        <% if (errors && errors.category) { %>
+                                          <div class="text-danger">
+                                            <%= errors.category.msg %>
+                                          </div>
+                                          <% } %>
+                              </div>
+                            </div>
+                          </div>
+
+
+                          <!-- Original Price -->
+                          <div class="form-outline mb-3">
+                            <div class="row mb-1 align-items-center">
+                              <label class="form-label col-md-3" for="originalprice">Original Price</label>
+                              <div class="col-md-9">
+                                <input type="number" id="originalprice" name="originalprice"
+                                  class="form-control form-control-md <% if (errors && errors.originalprice) { %> is-invalid <% } %>" />
+                                <% if (errors && errors.originalprice) { %>
+                                  <div class="invalid-feedback">
+                                    <%= errors.originalprice.msg %>
+                                  </div>
+                                  <% } %>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- Discount Price -->
+                          <div class="form-outline mb-3">
+                            <div class="row mb-1 align-items-center">
+                              <label class="form-label col-md-3" for="discountprice">Discount Price</label>
+                              <div class="col-md-9">
+                                <input type="number" id="discountprice" name="discountprice"
+                                  class="form-control form-control-md <% if (errors && errors.discountprice) { %> is-invalid <% } %>" />
+                                <% if (errors && errors.discountprice) { %>
+                                  <div class="invalid-feedback">
+                                    <%= errors.discountprice.msg %>
+                                  </div>
+                                  <% } %>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- Stock -->
+                          <div class="form-outline mb-3">
+                            <div class="row mb-1 align-items-center">
+                              <label class="form-label col-md-3" for="stock">Stock</label>
+                              <div class="col-md-9">
+                                <input type="number" id="stock" name="stock"
+                                  class="form-control form-control-md <% if (errors && errors.stock) { %> is-invalid <% } %>" />
+                                <% if (errors && errors.stock) { %>
+                                  <div class="invalid-feedback">
+                                    <%= errors.stock.msg %>
+                                  </div>
+                                  <% } %>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- Submit Button -->
+                          <div class="col-4 d-flex text-center mt-3">
+                            <button type="submit" class="btn btn-block  btn-md text-white"
+                              style="background-color: #204f38;">Add Product</button>
+                          </div>
+
+
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      </div>
+      </div>
+
+      </div>
+    </section>
+
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('form');
+        const imageInput = document.getElementById('images');
+        const previewContainer = document.getElementById('image-preview-container');
+        const maxImages = 5; // Maximum number of images allowed
+        const maxSize = 5 * 1024 * 1024; // 5 MB
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+
+        // Validate form before submission
+        form.addEventListener('submit', function (event) {
+          event.preventDefault(); // Prevent form submission initially
+
+          let valid = true;
+
+          // Check required fields
+          const name = document.getElementById('name').value.trim();
+          const description = document.getElementById('description').value.trim();
+          const category = document.querySelector('select[name="category"]').value;
+          const originalPrice = parseFloat(document.getElementById('originalprice').value.trim());
+          const discountPrice = parseFloat(document.getElementById('discountprice').value.trim());
+          const stock = parseInt(document.getElementById('stock').value.trim(), 10);
+
+
+
+          // Stock validation
+          if (isNaN(stock) || stock <= 0) {
+            valid = false;
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Enter a valid stock count greater than 0',
+              confirmButtonColor: 'red',
+            });
+          }
+
+          if (discountPrice >= originalPrice) {
+            valid = false;
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Discount price must be less than the original price',
+              confirmButtonColor: 'red',
+            });
+          }
+
+          // Discount price validation
+          if (isNaN(discountPrice) || discountPrice <= 0) {
+            valid = false;
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Enter a valid discount price greater than 0',
+              confirmButtonColor: 'red',
+            });
+          }
+
+          // Original price validation
+          if (isNaN(originalPrice) || originalPrice <= 0) {
+            valid = false;
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Enter a valid original price greater than 0',
+              confirmButtonColor: 'red',
+            });
+          }
+          // Category validation
+          if (!category) {
+            valid = false;
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Category is required',
+              confirmButtonColor: 'red',
+            });
+          }
+          // Description validation
+          if (!description || description.length < 5) {
+            valid = false;
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Description is required with a minimum of 5 characters',
+              confirmButtonColor: 'red',
+            });
+          }
+          // Name validation
+          if (!name || name.length < 3) {
+            valid = false;
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Name is required with a minimum of 3 characters',
+              confirmButtonColor: 'red',
+            });
+          }
+
+          // Validate image files
+          if (imageInput.files.length === 0) {
+            valid = false;
+            Swal.fire({
+              icon: 'error',
+              title: 'Invalid',
+              text: 'At least one image is required',
+              confirmButtonColor: 'red',
+            });
+          } else {
+            for (const file of imageInput.files) {
+              if (!allowedTypes.includes(file.type)) {
+                valid = false;
+                Swal.fire({
+                  icon: 'error',
+                  title: `Invalid file type: ${file.name}`,
+                  text: 'Only JPEG, PNG, GIF, and WebP are allowed.',
+                  confirmButtonColor: 'red',
+                });
+              }
+
+              if (file.size > maxSize) {
+                valid = false;
+                Swal.fire({
+                  icon: 'error',
+                  title: `File too large: ${file.name}`,
+                  text: 'Maximum file size is 5MB.',
+                  confirmButtonColor: 'red',
+                });
+              }
+            }
+          }
+
+          // If the form is valid, show confirmation SweetAlert
+          if (valid) {
+            Swal.fire({
+              icon: 'question',
+              title: 'Are you sure?',
+              text: 'Do you want to add this product?',
+              showCancelButton: true,
+              confirmButtonColor: '#204f38',
+              cancelButtonColor: 'blanchedalmond',
+              confirmButtonText: 'Yes, add it!',
+              cancelButtonText: '<span style="color:black;">Cancel</span>',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // If confirmed, show success alert and submit form
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Success',
+                  text: 'Product added successfully!',
+                  confirmButtonColor: '#204f38'
+                }).then(() => {
+                  form.submit(); // Submit form after showing success alert
+                });
+              }
+            });
+          }
+        });
+
+        // Preview images
+        function previewImages() {
+          const previewContainer = document.getElementById('image-preview-container');
+          const files = document.getElementById('images').files;
+          const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+          const maxSize = 5 * 1024 * 1024; // 5 MB
+          const maxImages = 5; // Maximum number of images allowed
+          const currentImagesCount = previewContainer.querySelectorAll('.preview-image-container').length;
+
+          // Check if total images exceed the limit
+          if (currentImagesCount + files.length > maxImages) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Image limit exceeded',
+              text: `You can only upload a maximum of ${maxImages} images.`,
+              confirmButtonColor: 'red',
+            });
+            return;
+          }
+
+          for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+
+            // Validate file type
+            if (!allowedTypes.includes(file.type)) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Invalid file type',
+                text: `File type not allowed: ${file.name}. Only JPEG, PNG, GIF, and WebP are allowed.`,
+                confirmButtonColor: 'red',
+              });
+              continue;
+            }
+
+            // Validate file size
+            if (file.size > maxSize) {
+              Swal.fire({
+                icon: 'error',
+                title: 'File too large',
+                text: `File is too large: ${file.name}. Maximum size is 5MB.`,
+                confirmButtonColor: 'red',
+              });
+              continue;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+              const previewWrapper = document.createElement('div');
+              previewWrapper.classList.add('preview-image-container');
+
+              const img = document.createElement('img');
+              img.src = e.target.result;
+              img.alt = file.name;
+
+              const closeIcon = document.createElement('div');
+              closeIcon.classList.add('close-icon');
+              closeIcon.innerHTML = '&times;';
+              closeIcon.onclick = function () {
+                removeImage(previewWrapper);
+              };
+
+              previewWrapper.appendChild(img);
+              previewWrapper.appendChild(closeIcon);
+              previewContainer.appendChild(previewWrapper);
+            };
+            reader.readAsDataURL(file);
+          }
+        }
+
+        // Helper function to remove image
+        function removeImage(previewWrapper) {
+          previewWrapper.remove();
+        }
+
+        imageInput.addEventListener('change', previewImages);
+      });
+
+      function removeImage(previewWrapper, file) {
+        const fileInput = document.getElementById('images');
+        const dataTransfer = new DataTransfer();
+        const files = Array.from(fileInput.files);
+
+        for (let i = 0; i < files.length; i++) {
+          if (files[i] === file) continue;
+          dataTransfer.items.add(files[i]);
+        }
+
+        fileInput.files = dataTransfer.files;
+        previewWrapper.remove();
+      }
+    </script>
+    <%- include('../layouts/footer.ejs') %>

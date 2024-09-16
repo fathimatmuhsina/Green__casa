@@ -1,0 +1,92 @@
+<%- include('../layouts/commonHeader.ejs') %>
+
+
+  <section class="vh-100 "
+    style="background-image: url('images/greencasabg.avif'); background-position: center; background-repeat: no-repeat; background-size: cover;">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col col-md-8">
+          <div class="card border border-success " style="border-radius: 1rem ,bold;">
+
+
+            <div class="row g-0">
+
+              <div class="col-md-12 col-lg-12 d-flex align-items-center">
+                <div class="card-body p-4 p-lg-5 text-black">
+
+
+                  <% if (typeof message !=='undefined' ) { %>
+                    <div class="alert alert-info" role="alert" style="text-align: center;">
+                      <%= message %>
+                    </div>
+                    <% } %>
+
+                      <form action="/otplogin" method="post">
+
+
+
+                        <h4 class="fw-normal mb-2 pb-2 text-center" style="letter-spacing: 1px;">Login with OTP</h4>
+
+                        <div class="form-outline mb-1">
+                          <input type="email" name="email" class="form-control form-control-md" />
+                          <label class="form-label">Email address</label>
+                        </div>
+
+
+                        <div class="pt-1 mb-1">
+                          <button class="btn btn-md btn-block text-white" style="background-color: #204f38;"
+                            type="submit">Send OTP</button>
+                        </div>
+
+
+
+
+
+
+
+
+                        <p class="mb-3 pb-lg-2" style="color: black;">Don't have an account? <a href="register"
+                            style="color: #204f38;"><i class=" me-2 text-black"></i><b>Register here</b></a></p>
+
+                        <!-- <script>
+                      var timeLeft = 60;
+                      var timerElement = document.getElementById('time');
+              
+                      function updateTimer() {
+                          timeLeft--;
+                          timerElement.textContent = timeLeft;
+              
+                          if (timeLeft <= 0) {
+                              clearInterval(timer);
+                              // Handle timeout, maybe show a message or refresh the page
+                          }
+                      }
+              
+                      var timer = setInterval(updateTimer, 1000);
+                  </script>
+   -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Js Plugins -->
+  <script src="js/jquery-3.3.1.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/jquery.nice-select.min.js"></script>
+  <script src="js/jquery-ui.min.js"></script>
+  <script src="js/jquery.slicknav.js"></script>
+  <script src="js/mixitup.min.js"></script>
+  <script src="js/owl.carousel.min.js"></script>
+  <script src="js/main.js"></script>
+
+
+
+</body>
+
+</html>

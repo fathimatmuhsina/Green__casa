@@ -1,0 +1,668 @@
+<%- include('../layouts/detailheader.ejs') %>
+  <div class="container mt-4">
+    <div class="col-lg-12">
+      <div class="card mb-4 ">
+        <div class="card-body">
+          <h4 class="text-center"><strong> Order Details</strong></h4>
+          <hr>
+          <!-- Order Information -->
+          <div class="row mb-4">
+            <div class="col-md-6 ">
+
+              <p><strong>Order ID:</strong>
+                <%= order._id %>
+              </p>
+              <p><strong>Date:</strong>
+                <%= new Date(order.createdAt).toLocaleDateString('en-US', { weekday: 'long' , year: 'numeric' ,
+                  month: 'short' , day: 'numeric' }) %>
+
+              </p>
+              <p><strong>Time:</strong>
+                <%= new Date(order.createdAt).toLocaleTimeString('en-US') %>
+              </p>
+            </div>
+            <div class="col-md-6 ">
+              <p><strong>Coupon Code:</strong>
+                <% if (couponCode) { %>
+                  <%= couponCode %>
+                    <% } else { %>
+                      N/A
+                      <% } %>
+              </p>
+              <p><strong>Payment Method:</strong>
+                <%= order.paymentMethod %>
+              </p>
+              <p><strong>Status:</strong>
+                <%= order.status %>
+              </p>
+            </div>
+          </div>
+
+          <!-- Product Details -->
+          <h5 class="text-left mb-3"><strong>Product Details</strong></h5>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Image</th>
+                <th scope="col">Product</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Price</th>
+                <th scope="col">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% order.items.forEach(item=> { %>
+                <tr>
+                  <td>
+                    <% if (item.product.image && item.product.image.length> 0) { %>
+                      <img src="/images/<%= item.product.image[0] %>" alt="Product Image"
+                        style="width: 100px; height: auto;">
+                      <% } %>
+                  </td>
+                  <td>
+                    <%= item.product.name %>
+                  </td>
+                  <td>
+                    <%= item.quantity %>
+                  </td>
+                  <td>
+                    <span><s style="color: red;">₹<%= item.product.originalprice.toFixed(2) %></s></span>
+                    ₹<%= (item.product.offerPrice || item.product.discountprice).toFixed(2) %>
+                  </td>
+                  <td>₹<%= ((item.product.offerPrice || item.product.discountprice) * item.quantity).toFixed(2) %>
+                  </td>
+                </tr>
+                <% }) %>
+            </tbody>
+          </table>
+
+          <!-- Totals -->
+          <hr>
+          <div class="row">
+            <div class="col-md-8"></div>
+            <div class="col-md-4">
+              <div class="row">
+                <div class="col-md-9">Coupon Discount:</div>
+                <div class="col-md-3">-₹<%= order.discountAmount.toFixed(2) %>
+                </div>
+                <%if (order.referralCode){ %>
+                <div class="col-md-9">Referral Discount:</div>
+                <div class="col-md-3">-₹<%= order.referralDiscountAmount.toFixed(2) %>
+                </div>
+                <%}%>
+
+                <div class="col-md-9">Delivery Charge:</div>
+                <div class="col-md-3">+₹<%= order.deliveryCharge %>
+                </div>
+
+                <div class="col-md-9">Total Amount: </div>
+                <div class="col-md-3"><strong>₹<%= order.totalAmount.toFixed(2) %>
+                      </strong< /div>
+
+
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <!-- Order Details Table -->
+          <table class="table table-bordered text-left mb-4">
+            <tbody>
+              <% if (order.status !=='Cancelled' ) { %>
+                <tr>
+                  <th scope="row">Expected Delivery:</th>
+                  <td>
+                    <%= new Date(order.expectedDeliveryDate).toLocaleDateString('en-US', { weekday: 'long' ,
+                      year: 'numeric' , month: 'short' , day: 'numeric' }) %> -
+                      <%= new Date(order.expectedDeliveryDate).toLocaleTimeString('en-US') %>
+                  </td>
+                </tr>
+                <% } %>
+                  <% if (order.actualDeliveryDate) { %>
+                    <tr>
+                      <th scope="row">Delivered On:</th>
+                      <td>
+                        <%= new Date(order.actualDeliveryDate).toLocaleDateString('en-US', { weekday: 'long' ,
+                          year: 'numeric' , month: 'short' , day: 'numeric' }) %> -
+                          <%= new Date(order.actualDeliveryDate).toLocaleTimeString('en-US') %>
+                            <% if (order.actualDeliveryDate < order.expectedDeliveryDate) { %>
+                              <p class="text-success">Your order was delivered earlier than expected!</p>
+                              <% } %>
+                      </td>
+                    </tr>
+                    <% } %>
+                      <% if (order.status==='Cancelled' ) { %>
+                        <tr>
+                          <th scope="row">Cancellation Reason:</th>
+                          <td>
+                            <%= order.cancellationReason %>
+                          </td>
+                        </tr>
+                        <% } %>
+                          <% if (order.returnStatus) { %>
+                            <tr>
+                              <th scope="row">Return Status:</th>
+                              <td>
+                                <%= order.returnStatus %>
+                              </td>
+                            </tr>
+                            <% if (order.returnStatus==='Rejected' ) { %>
+                              <tr>
+                                <th scope="row">Rejection Reason:</th>
+                                <td>
+                                  <%= order.returnReason %>
+                                </td>
+                              </tr>
+                              <% } %>
+                                <% } %>
+            </tbody>
+          </table>
+
+          <!-- Cancel Order Button -->
+          <% if (order.status==='Processing' ) { %>
+            <div class="text-center mb-4">
+              <button class="btn btn-danger" id="cancelOrderButton" data-bs-toggle="modal"
+                data-bs-target="#cancelOrderModal" data-item-id="<%= order._id %>">
+                Cancel this item
+              </button>
+            </div>
+            <% } %>
+              <!-- Cancel Order Button -->
+              <% if (order.returnStatus==='Requested' ) { %>
+                <div class="text-center mb-4">
+                  <button class="btn btn-danger" id="cancelReturnBtn" data-item-id="<%= order._id %>">
+                    Cancel Return
+                  </button>
+                </div>
+                <% } %>
+
+                  <!-- Cancel Order Modal -->
+                  <div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="cancelOrderModalLabel">Cancel Order</h5>
+                          <a class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                            style="cursor: pointer; color: rgb(16, 16, 16); width: 30px; height: 30px; font-size: 16px;">X</a>
+                        </div>
+                        <div class="modal-body">
+                          <form id="cancelForm" action="/cancel-order" method="post">
+                            <input type="hidden" name="orderId" value="<%= order._id %>">
+                            <input type="hidden" name="itemId" id="itemId">
+                            <div class="mb-3">
+                              <label for="reason" class="form-label">Reason for Cancellation:</label><br>
+                              <select class="form-control" id="reason" name="reason" required>
+                                <option value="">Select a reason</option>
+                                <option value="Changed my mind">Changed my mind</option>
+                                <option value="Found a better price">Found a better price</option>
+                                <option value="Ordered by mistake">Ordered by mistake</option>
+                                <option value="Other">Other</option>
+                              </select>
+                            </div><br>
+
+                            <div class="mb-3" id="descriptionContainer">
+                              <br><label for="description" class="form-label">Additional Description:</label>
+                              <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                              <button class="btn btn-danger me-2" id="submitCancelButton" type="button">Submit
+                                Cancellation</button>
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Return Order Button -->
+                  <% if (order.status==='Delivered' && !order.returnStatus) { %>
+                    <div class="text-center mb-4">
+                      <button class="btn btn-warning" type="button" data-bs-toggle="modal"
+                        data-bs-target="#returnOrderModal">
+                        Return Order
+                      </button>
+                    </div>
+                    <% } %>
+
+                      <!-- Return Order Modal -->
+                      <div class="modal fade" id="returnOrderModal" tabindex="-1"
+                        aria-labelledby="returnOrderModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="returnOrderModalLabel">Return Order</h5>
+                              <a class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                                style="cursor: pointer; color: rgb(16, 16, 16); width: 30px; height: 30px; font-size: 16px;">X</a>
+                            </div>
+                            <div class="modal-body">
+                              <form id="returnForm" action="/return-order" method="post">
+                                <input type="hidden" name="orderId" value="<%= order._id %>">
+                                <div class="mb-3">
+                                  <label for="returnReason" class="form-label">Reason for Return:</label><br>
+                                  <select class="form-control" id="returnReason" name="returnReason" required>
+                                    <option value="">Select a reason</option>
+                                    <option value="Damaged product">Damaged product</option>
+                                    <option value="Incorrect product">Incorrect product</option>
+                                    <option value="Quality issues">Quality issues</option>
+                                    <option value="Other">Other</option>
+                                  </select>
+                                </div>
+                                <br>
+                                <div class="mb-3">
+                                  <br><label for="returnDescription" class="form-label">Additional Description:</label>
+                                  <textarea class="form-control" id="returnDescription" name="returnDescription"
+                                    rows="3"></textarea>
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                  <button class="btn btn-warning me-2" id="submitReturnButton" type="button">Submit
+                                    Return</button>
+                                  <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Invoice Section -->
+<% if(order.status!=='Cancelled'){%>
+  <div class="container mt-4">
+    <div class="col-lg-12">
+      <div class="card mb-4 text-center">
+        <div class="card-body">
+          <h4 style="margin: 20px 0; font-size: 18px; color: #333;">Invoice</h4>
+          <div id="invoice">
+            <!-- Page Wrapper with Margin -->
+            <div style="margin: 40px; font-family: Arial, sans-serif;">
+
+              <!-- Heading -->
+              <h1 style="text-align: center; font-size: 24px; color: #4CAF50; margin-bottom: 30px;" class="d-none">GREEN
+                CASA</h1>
+              <hr>
+              <!-- Order Details -->
+              <div style="display: flex; justify-content: space-between;">
+                <div style="width: 48%;">
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <p style="margin: 0; font-weight: bold;">Order ID:</p>
+                    <p style="margin: 0; color: #333;">
+                      <%= order._id %>
+                    </p>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <p style="margin: 0; font-weight: bold;">Order Date:</p>
+                    <p style="margin: 0; color: #333;">
+                      <%= new Date(order.createdAt).toLocaleDateString('en-US') %>
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Invoice Details -->
+                <div style="width: 48%;">
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <p style="margin: 0; font-weight: bold;">Invoice Number:</p>
+                    <p style="margin: 0; color: #333;">INV-<%= order._id %>
+                    </p>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <p style="margin: 0; font-weight: bold;">Invoice Date:</p>
+                    <p style="margin: 0; color: #333;">
+                      <%= new Date().toLocaleDateString('en-US') %>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <hr style="border: 1px solid #ddd; margin-top: 20px;">
+
+              <!-- Shipping Address -->
+              <div style="width: 100%;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                  <p style="margin: 0; font-weight: bold;">Shipping Address:</p>
+                  <p style="margin: 0; color: #333;">
+                    <%= order.deliveryAddress.housename %>, <%= order.deliveryAddress.street %>, <%=
+                          order.deliveryAddress.city %>,
+                          <%= order.deliveryAddress.state %>, <%= order.deliveryAddress.zipcode %>, <%=
+                                order.deliveryAddress.country %>
+                  </p>
+                </div>
+              </div>
+
+              <!-- Product Details Table -->
+              <hr style="border: 1px solid #ddd; margin-top: 20px;">
+              <h5 style="margin: 20px 0; font-size: 16px; color: #333;">Product Details</h5>
+              <table style="width: 100%; border-collapse: collapse; border: 1px solid #ddd;">
+                <thead>
+                  <tr>
+                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Product Name</th>
+                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Price </th>
+                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Quantity</th>
+                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Gross Amount</th>
+                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Total</th>
+
+
+                  </tr>
+                </thead>
+                <tbody>
+                  <% order.items.forEach(item=> { %>
+                    <tr>
+                      <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">
+                        <%= item.product.name %>
+                      </td>
+                      <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">₹<%=
+                          (item.product.discountprice) %>
+                      </td>
+
+                      <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">
+                        <%= item.quantity %>
+                      </td>
+                      <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">₹<%=
+                          ((item.product.offerPrice||item.product.discountprice * item.quantity)).toFixed(2) %>
+                      </td>
+
+                      <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">₹<%=(
+                          (item.product.offerPrice||item.product.discountprice * item.quantity) *
+                          item.quantity).toFixed(2)%>
+                      </td>
+
+                    </tr>
+                    <% }); %>
+                </tbody>
+              </table>
+
+              <!-- Total Discount Amount -->
+              <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                <p style="margin: 0; font-weight: bold;">Coupon Discount:</p>
+                <p style="margin: 0; color: #333;">-₹<%= discountAmount.toFixed(2) %>
+                </p>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                <p style="margin: 0; font-weight: bold;">Delivery Charde:</p>
+                <p style="margin: 0; color: #333;">+₹<%= order.deliveryCharge %>
+                </p>
+              </div>
+
+              <%if (order.referralCode){ %>
+                <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                  <p style="margin: 0; font-weight: bold;">Referral Discount:</p>
+                  <p style="margin: 0; color: #333;">-₹<%= order.referralDiscountAmount.toFixed(2) %>
+                  </p>
+                </div>
+              
+                <%}%>
+
+              <!-- Total Amount -->
+              <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                <p style="margin: 0; font-weight: bold;">Total Amount:</p>
+                <p style="margin: 0; color: #333;">₹<%= (order.totalAmount).toFixed(2) %>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4">
+            <button id="downloadInvoiceBtn" class="btn btn-primary">Download Invoice as PDF</button>
+          </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+<%}%>
+
+  </div>
+  </div>
+  </div>
+  <script>
+    document.querySelectorAll('.cancel-item-btn').forEach(button => {
+      button.addEventListener('click', function () {
+        const itemId = this.getAttribute('data-item-id');
+        document.getElementById('itemId').value = itemId;
+        document.getElementById('cancelForm').style.display = 'block';
+      });
+    });
+  </script>
+  <script>
+    document.getElementById('downloadInvoiceBtn').addEventListener('click', function () {
+      const invoiceElement = document.getElementById('invoice').innerHTML;
+      fetch('/download-invoice', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ html: invoiceElement, orderId: '<%= order._id %>' })
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.blob();
+        })
+        .then(blob => {
+          const url = window.URL.createObjectURL(new Blob([blob]));
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', 'invoice_<%= order._id %>.pdf');
+          document.body.appendChild(link);
+          link.click();
+          link.parentNode.removeChild(link);
+        })
+        .catch(error => console.error('Error downloading invoice:', error));
+    });
+
+
+  </script>
+
+  <script>
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const reasonSelect = document.getElementById('reason');
+      const descriptionContainer = document.getElementById('descriptionContainer');
+      const descriptionInput = document.getElementById('description');
+      const submitCancelButton = document.getElementById('submitCancelButton');
+
+      // Show/Hide description based on "Other" selection
+      reasonSelect.addEventListener('change', function () {
+        if (reasonSelect.value === 'Other') {
+          descriptionContainer.style.display = 'block';
+          descriptionInput.setAttribute('required', true);
+        } else {
+          descriptionContainer.style.display = 'none';
+          descriptionInput.removeAttribute('required');
+        }
+      });
+
+      // Handle form submission with validation
+      submitCancelButton.addEventListener('click', function () {
+        const reason = reasonSelect.value;
+        const description = descriptionInput.value;
+
+        if (!reason) {
+          Swal.fire({
+            title: 'Invalid Submission',
+            text: 'Please select a reason for canceling the order.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+          return;
+        }
+
+        if (reason === 'Other' && !description) {
+          Swal.fire({
+            title: 'Invalid Submission',
+            text: 'Please provide a description for "Other" reason.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+          return;
+        }
+
+        // Show confirmation modal
+        Swal.fire({
+          title: 'Are you sure?',
+          text: 'Do you want to cancel this order?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, cancel it!',
+          confirmButtonColor: '#204f38',
+          cancelButtonText: 'No, keep it'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Show success message and submit the form
+            Swal.fire({
+              title: 'Order Cancellation',
+              text: 'Order cancellation is successful.',
+              icon: 'success',
+              confirmButtonText: 'OK',
+              confirmButtonColor: '#204f38',
+            }).then(() => {
+              document.getElementById('cancelForm').submit();
+            });
+          }
+        });
+      });
+
+
+
+      const cancelReturnBtn = document.getElementById('cancelReturnBtn');
+
+      if (cancelReturnBtn) {
+        cancelReturnBtn.addEventListener('click', function () {
+          Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#204f38',
+
+            confirmButtonText: 'Yes, cancel it!',
+            cancelButtonText: 'No, keep it'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              // Perform the cancellation logic, e.g., send a request to the server
+              cancelReturnRequest().then(() => {
+                Swal.fire(
+                  'Cancelled!',
+                  'Return request cancelled.',
+                  'success'
+                ).then(() => {
+                  location.reload(); // Reload the page to reflect changes
+                });
+              }).catch((error) => {
+                Swal.fire(
+                  'Error!',
+                  'There was an error cancelling the return request.',
+                  'error'
+                );
+              });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+              Swal.fire(
+                'Cancelled',
+                'Your return request is safe ',
+                'info'
+              );
+            }
+          });
+        });
+      }
+
+      function cancelReturnRequest() {
+        const orderId = '<%= order._id %>'; // Get the order ID from the EJS template
+        return fetch('/cancel-return', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ orderId: orderId })
+        }).then(response => response.json());
+      }
+
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+      // Cancel Order Modal
+      document.querySelectorAll('#cancelOrderButton').forEach(button => {
+        button.addEventListener('click', function () {
+          const itemId = this.getAttribute('data-item-id');
+          document.getElementById('itemId').value = itemId;
+        });
+      });
+
+      // Optional: Handle the return order modal similarly if needed
+    });
+  </script>
+  <script>
+    document.getElementById('returnReason').addEventListener('change', function () {
+      const reason = this.value;
+      const descriptionField = document.getElementById('returnDescription');
+
+      if (reason === 'Other') {
+        descriptionField.disabled = false; // Enable the description field
+      } else {
+        descriptionField.disabled = true;  // Disable the description field
+        descriptionField.value = ''; // Clear the description field
+      }
+    });
+
+    document.getElementById('submitReturnButton').addEventListener('click', function (event) {
+      const returnReason = document.getElementById('returnReason').value;
+      const returnDescription = document.getElementById('returnDescription').value;
+
+      if (!returnReason) {
+        Swal.fire({
+          title: 'Invalid Submission',
+          text: 'Please select a reason for return.',
+          icon: 'error',
+          confirmButtonText: 'OK',
+          confirmButtonColor: 'red'
+        });
+        return;
+      }
+
+      if (returnReason === 'Other' && !returnDescription.trim()) {
+        Swal.fire({
+          title: 'Invalid Submission',
+          text: 'Please provide a description for your return.',
+          icon: 'error',
+          confirmButtonText: 'OK',
+          confirmButtonColor: 'red'
+        });
+        return;
+      }
+
+      // Confirmation before submitting the form
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'Do you want to return this order?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, return it!',
+        confirmButtonColor: '#204f38',
+        cancelButtonText: 'No, keep it'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Show success message
+          Swal.fire({
+            title: 'Return Request',
+            text: 'Return request sent successfully.',
+            icon: 'success',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#204f38'
+          }).then(() => {
+            document.getElementById('returnForm').submit(); // Submit the form after success alert
+          });
+        }
+      });
+    });
+  </script>
+  <%- include('../layouts/footer.ejs') %>

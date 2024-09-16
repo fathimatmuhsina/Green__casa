@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Ogani Template">
+    <meta name="keywords" content="Ogani, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Green Casa</title>
+    <link rel="icon" type="image/x-icon"
+        href="https://as1.ftcdn.net/v2/jpg/02/93/50/08/1000_F_293500889_YVID9WpEpRiKhmzpfkI8ySyphoOqttmI.jpg">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+
+    <!-- Add this script tag to include Moment.js -->
+    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        input,
+        select,
+        button {
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: calc(100% - 22px);
+            /* Full width minus padding and border */
+        }
+
+        button {
+            background-color: #204f38;
+            color: white;
+            cursor: pointer;
+            border: none;
+            width: auto;
+            /* Adjust button width */
+        }
+
+        button:hover {
+            background-color: #0b260c;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ddd;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: center;
+        }
+
+
+
+        .update-form {
+            display: none;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            /* Center align the buttons horizontally */
+            gap: 10px;
+            /* Space between buttons */
+        }
+
+        .actions button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .actions button.update-btn {
+            background-color: blanchedalmond;
+            /* Green background for update button */
+            color: black;
+            border-color: #204f38;
+        }
+
+        .actions button.update-btn:hover {
+            background-color: burlywood;
+            /* Darker green on hover */
+        }
+
+        .actions button.delete-btn {
+            background-color: #f44336;
+            /* Red background for delete button */
+            color: white;
+        }
+
+        .actions button.delete-btn:hover {
+            background-color: #e53935;
+            /* Darker red on hover */
+        }
+
+        .actions button.apply-btn {
+            background-color: #204f38;
+            /* Blue background for apply button */
+            color: white;
+        }
+
+        .actions button.apply-btn:hover {
+            background-color: #0b260c;
+            /* Darker blue on hover */
+        }
+
+        .actions form {
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+
+            input,
+            select,
+            button {
+                width: 100%;
+            }
+
+            table,
+            th,
+            td {
+                font-size: 14px;
+            }
+        }
+
+        .applied-btn {
+            background-color: #ccc;
+            color: #666;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="header__top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="header__top__left">
+
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <div class="header__top__right">
+                            <div class="header__top__right__social">
+                                <a href="#"><i class="fa fa-facebook"></i></a>
+                                <a href="#"><i class="fa fa-twitter"></i></a>
+                                <a href="#"><i class="fa fa-linkedin"></i></a>
+                                <a href="#"><i class="fa fa-pinterest-p"></i></a>
+                            </div>
+
+                            <div class="header__top__right__auth">
+                                <a href="/admin/logout" class="text-white"><i class="fa fa-user"></i>LogOut</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="background-color: blanchedalmond;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="header__logo">
+                            <a href="#" style="font-size: xx-large; color: green;"><i class="fa-solid fa-seedling"
+                                    style="color: green;"></i><b>Green Casa</b></a>
+
+                        </div>
+                    </div>
+                    <div class="col-lg-10 pt-3">
+                        <nav class="header__menu ">
+                            <ul>
+                                <li><a href="/admin/home">DASHBOARD</a></li>
+                                <li><a href="/admin/dashboard">COSTUMERS</a></li>
+
+                                <li><a href="/admin/view-products">PRODUCTS</a></li>
+
+                                <li><a href="/admin/view-category">CATEGORY</a></li>
+                                <li><a href="/admin/view-orders">ORDERS</a></li>
+
+                                <li><a href="/admin/inventory">Inventory</a></li>
+                                <li><a href="/contact">PROFILE</a></li>
+                                <li><a href="/admin/offers">OFFER</a></li>
+                                <li><a href="/admin/coupons">Coupon</a></li>
+                                <li><a href="/admin/sales-report">SALES</a></li>
+
+                            </ul>
+                        </nav>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="container mt-5">
+            <!-- Create New Offer Form -->
+            <div style="background-color:#204f38;">
+                <h4 class="text-white p-2">Create New Offer</h4>
+            </div>
+            <form action="/admin/offers" method="POST" style=" margin-bottom: 20px;
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+
+                <% const errors=validationErrors || []; %>
+
+                    <!-- Offer Name -->
+                    <input type="text" name="name" placeholder="Offer Name" value="<%= formData.name || '' %>">
+                    <% if (errors.some(e=> e.param === 'name')) { %>
+                        <span class="text-danger">
+                            <%= errors.find(e=> e.param === 'name').msg %>
+                        </span>
+                        <% } %>
+
+                            <!-- Offer Type -->
+                            <select name="type" id="offerType">
+                                <option value="">Select Offer Type</option>
+                                <option value="product" <%=formData.type==='product' ? 'selected' : '' %>>Product Offer
+                                </option>
+                                <option value="category" <%=formData.type==='category' ? 'selected' : '' %>>Category
+                                    Offer</option>
+                                <option value="referral" <%=formData.type==='referral' ? 'selected' : '' %>>Referral
+                                    Offer</option>
+                            </select>
+                            <% if (errors.some(e=> e.param === 'type')) { %>
+                                <span class="text-danger">
+                                    <%= errors.find(e=> e.param === 'type').msg %>
+                                </span>
+                                <% } %>
+
+                                    <!-- Discount -->
+                                    <input type="number" name="discount" placeholder="Discount Percentage"
+                                        value="<%= formData.discount || '' %>">
+                                    <% if (errors.some(e=> e.param === 'discount')) { %>
+                                        <span class="text-danger">
+                                            <%= errors.find(e=> e.param === 'discount').msg %>
+                                        </span>
+                                        <% } %>
+
+                                            <!-- Product Field (Only for Product Offers) -->
+                                            <div id="productField"
+                                                style="<%= formData.type === 'product' ? 'display: block;' : 'display: none;' %>">
+                                                <select name="productId" id="productSelect">
+                                                    <option value="">Select Product</option>
+                                                    <% product.forEach(product=> { %>
+                                                        <option value="<%= product._id %>"
+                                                            <%=formData.productId===product._id.toString() ? 'selected'
+                                                            : '' %>><%= product.name %>
+                                                        </option>
+                                                        <% }) %>
+                                                </select>
+                                                <% if (errors.some(e=> e.param === 'productId')) { %>
+                                                    <span class="text-danger">
+                                                        <%= errors.find(e=> e.param === 'productId').msg %>
+                                                    </span>
+                                                    <% } %>
+                                            </div>
+
+                                            <!-- Category Field (Only for Category Offers) -->
+                                            <div id="categoryField"
+                                                style="<%= formData.type === 'category' ? 'display: block;' : 'display: none;' %>">
+                                                <select name="categoryId">
+                                                    <% categories.forEach(category=> { %>
+                                                        <option value="<%= category._id %>"
+                                                            <%=formData.categoryId===category._id.toString()
+                                                            ? 'selected' : '' %>><%= category.name %>
+                                                        </option>
+                                                        <% }) %>
+                                                </select>
+                                                <% if (errors.some(e=> e.param === 'categoryId')) { %>
+                                                    <span class="text-danger">
+                                                        <%= errors.find(e=> e.param === 'categoryId').msg %>
+                                                    </span>
+                                                    <% } %>
+                                            </div>
+
+                                            <!-- Referral Code Field (Only for Referral Offers) -->
+                                            <div id="referralField"
+                                                style="<%= formData.type === 'referral' ? 'display: block;' : 'display: none;' %>">
+                                                <input type="text" name="referralCode" placeholder="Referral Code"
+                                                    value="<%= formData.referralCode || '' %>">
+                                                <% if (errors.some(e=> e.param === 'referralCode')) { %>
+                                                    <span class="text-danger">
+                                                        <%= errors.find(e=> e.param === 'referralCode').msg %>
+                                                    </span>
+                                                    <% } %>
+                                            </div>
+
+                                            <!-- Expiration Date -->
+                                            <input type="date" name="expirationDate" placeholder="Expiration Date"
+                                                value="<%= formData.expirationDate || '' %>">
+                                            <% if (errors.some(e=> e.param === 'expirationDate')) { %>
+                                                <span class="text-danger">
+                                                    <%= errors.find(e=> e.param === 'expirationDate').msg %>
+                                                </span>
+                                                <% } %>
+
+                                                    <!-- Submit Button -->
+                                                    <div class="text-center"><button type="submit">Create Offer</button>
+                                                    </div>
+            </form>
+
+            <div class="row ">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <form action="/admin/offers" method="GET">
+                                <select name="filterType" id="filterType">
+                                    <option value="all" <%=filterType==='all' ? 'selected' : '' %>>All Offers</option>
+                                    <option value="product" <%=filterType==='product' ? 'selected' : '' %>>Product
+                                        Offers</option>
+                                    <option value="category" <%=filterType==='category' ? 'selected' : '' %>>Category
+                                        Offers</option>
+                                    <option value="referral" <%=filterType==='referral' ? 'selected' : '' %>>Referral
+                                        Offers</option>
+                                </select>
+                        </div>
+                        <div class="col-md-5 pt-2"> <button type="submit"
+                                style="background-color: blanchedalmond; border-color: #204f38; color: black;"
+                                class="pl-5 pr-5">Filter</button>
+                        </div>
+                    </div>
+
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" id="offerSearch" placeholder="Search Offers..." onkeyup="searchOffers()"
+                        style="width: 100%; padding: 10px; margin-bottom: 20px;">
+                </div>
+            </div>
+
+
+            <!-- Existing Offers List -->
+            <div>
+
+                <h4 class=" p-2">Existing Offers</h4>
+            </div>
+            <table class="table table-striped">
+                <thead class="tablehead" style="background-color: #204f38;">
+                    <tr>
+                        <th>
+                            <a class="text-white"
+                                href="?sortField=name&sortOrder=<%= sortField === 'name' && sortOrder === 1 ? 'desc' : 'asc' %>">
+                                Name
+                                <i
+                                    class="fa <%= sortField === 'name' ? (sortOrder === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort' %>"></i>
+
+                            </a>
+                        </th>
+                        <th>
+                            <a class="text-white"
+                                href="?sortField=type&sortOrder=<%= sortField === 'type' && sortOrder === 1 ? 'desc' : 'asc' %>">
+                                Type
+                                <i
+                                    class="fa <%= sortField === 'type' ? (sortOrder === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort' %>"></i>
+
+                            </a>
+                        </th>
+                        <th>
+                            <a class="text-white"
+                                href="?sortField=discount&sortOrder=<%= sortField === 'discount' && sortOrder === 1 ? 'desc' : 'asc' %>">
+                                Discount
+                                <i
+                                    class="fa <%= sortField === 'discount' ? (sortOrder === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort' %>"></i>
+
+                            </a>
+                        </th>
+                        <% if (filterType==='all' || filterType==='product' ) { %>
+                            <th>
+                                <a class="text-white"
+                                    href="?sortField=productId&sortOrder=<%= sortField === 'productId' && sortOrder === 1 ? 'desc' : 'asc' %>">
+                                    Product
+                                    <i
+                                        class="fa <%= sortField === 'productId' ? (sortOrder === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort' %>"></i>
+
+                                </a>
+                            </th>
+                            <% } %>
+                                <% if (filterType==='all' || filterType==='category' ) { %>
+                                    <th>
+                                        <a class="text-white"
+                                            href="?sortField=categoryId&sortOrder=<%= sortField === 'categoryId' && sortOrder === 1 ? 'desc' : 'asc' %>">
+                                            Category
+                                            <i
+                                                class="fa <%= sortField === 'categoryId' ? (sortOrder === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort' %>"></i>
+
+                                        </a>
+                                    </th>
+                                    <% } %>
+                                        <% if (filterType==='all' || filterType==='referral' ) { %>
+                                            <th>
+                                                <a class="text-white"
+                                                    href="?sortField=referralCode&sortOrder=<%= sortField === 'referralCode' && sortOrder === 1 ? 'desc' : 'asc' %>">
+                                                    Referral Code
+                                                    <i
+                                                        class="fa <%= sortField === 'referralCode' ? (sortOrder === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort' %>"></i>
+
+                                                </a>
+                                            </th>
+                                            <% } %>
+                                                <th>
+                                                    <a class="text-white"
+                                                        href="?sortField=expirationDate&sortOrder=<%= sortField === 'expirationDate' && sortOrder === 1 ? 'desc' : 'asc' %>">
+                                                        Status
+                                                        <i
+                                                            class="fa <%= sortField === 'expirationDate' ? (sortOrder === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort' %>"></i>
+
+                                                    </a>
+                                                </th>
+
+                                                <th class="text-white">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody class="tablebody ">
+                    <% offers.forEach(offer=> { %>
+                        <% if (filterType==='all' || filterType===offer.type) { %>
+                            <tr>
+                                <td>
+                                    <%= offer.name %>
+                                </td>
+                                <td>
+                                    <%= offer.type %>
+                                </td>
+                                <td>
+                                    <%= offer.discount %> %
+                                </td>
+                                <% if (filterType==='all' || filterType==='product' ) { %>
+                                    <td>
+                                        <%= offer.type==='product' ? (product.find(c=> c._id.equals(offer.productId)) ||
+                                            {}).name : 'N/A' %>
+
+                                            <% } %>
+                                                <% if (filterType==='all' || filterType==='category' ) { %>
+                                    <td>
+                                        <%= offer.type==='category' ? (categories.find(c=>
+                                            c._id.equals(offer.categoryId)) || {}).name : 'N/A' %>
+                                    </td>
+                                    <% } %>
+                                        <% if (filterType==='all' || filterType==='referral' ) { %>
+                                            <td>
+                                                <%=offer.type==='referral' ? (offer.referralCode) : 'N/A' %>
+                                            </td>
+                                            <% } %>
+                                                <td>
+                                                    <% if (offer.expirationDate && new Date(offer.expirationDate) < new
+                                                        Date()) { %>
+                                                        <span class="text-danger">Expired</span>
+                                                        <% } else { %>
+                                                            <span class="text-success">Active</span>
+                                                            <% } %>
+                                                </td>
+                                                <td class="actions">
+                                                    <% if (!(offer.expirationDate && new Date(offer.expirationDate) <
+                                                        new Date())) { %>
+                                                        <button type="button" class="update-btn"
+                                                            onclick="toggleUpdateForm('<%= offer._id %>')">Edit</button>
+                                                        <button type="button" class="apply-btn"
+                                                            onclick="applyOffer('<%= offer._id %>')">Apply</button>
+
+                                                        <% } %>
+                                                            <form action="/admin/offers/delete" method="POST"
+                                                                class="delete-form" style="display:inline;">
+                                                                <input type="hidden" name="id" value="<%= offer._id %>">
+                                                                <button type="submit" class="delete-btn">Delete</button>
+                                                            </form>
+
+
+                                                </td>
+                            </tr>
+
+                            <tr id="updateForm_<%= offer._id %>" class="update-form">
+                                <td colspan="8">
+                                    <form action="/admin/offers/update" method="POST">
+                                        <input type="hidden" name="id" value="<%= offer._id %>">
+
+                                        <!-- Offer Name -->
+                                        <input type="text" name="name" value="<%= offer.name %>"
+                                            placeholder="Offer Name">
+                                        <% if (validationErrors && validationErrors.some(e=> e.param === 'name')) { %>
+                                            <span class="text-danger">
+                                                <%= validationErrors.find(e=> e.param === 'name').msg %>
+                                            </span>
+                                            <% } %>
+
+                                                <!-- Offer Type -->
+                                                <select name="type" class="offer-type-update"
+                                                    data-offer-id="<%= offer._id %>"
+                                                    onchange="toggleFields('<%= offer._id %>', this.value)">
+                                                    <option value="product" <%=offer.type==='product' ? 'selected' : ''
+                                                        %>>Product Offer</option>
+                                                    <option value="category" <%=offer.type==='category' ? 'selected'
+                                                        : '' %>>Category Offer</option>
+                                                    <option value="referral" <%=offer.type==='referral' ? 'selected'
+                                                        : '' %>>Referral Offer</option>
+                                                </select>
+                                                <% if (validationErrors && validationErrors.some(e=> e.param ===
+                                                    'type')) { %>
+                                                    <span class="text-danger">
+                                                        <%= validationErrors.find(e=> e.param === 'type').msg %>
+                                                    </span>
+                                                    <% } %>
+
+                                                        <!-- Discount -->
+                                                        <input type="number" name="discount"
+                                                            value="<%= offer.discount %>"
+                                                            placeholder="Discount Percentage">
+                                                        <% if (validationErrors && validationErrors.some(e=> e.param ===
+                                                            'discount')) { %>
+                                                            <span class="text-danger">
+                                                                <%= validationErrors.find(e=> e.param ===
+                                                                    'discount').msg %>
+                                                            </span>
+                                                            <% } %>
+
+                                                                <!-- Product ID Field -->
+                                                                <div id="productField_<%= offer._id %>"
+                                                                    style="<%= offer.type === 'product' ? 'display:block;' : 'display:none;' %>">
+                                                                    <select name="productId">
+                                                                        <% product.forEach(product=> { %>
+                                                                            <option value="<%= product._id %>"
+                                                                                <%=offer.productId &&
+                                                                                offer.productId.equals(product._id)
+                                                                                ? 'selected' : '' %>><%= product.name %>
+                                                                            </option>
+                                                                            <% }) %>
+                                                                    </select>
+                                                                    <% if (validationErrors && validationErrors.some(e=>
+                                                                        e.param === 'productId')) { %>
+                                                                        <span class="text-danger">
+                                                                            <%= validationErrors.find(e=> e.param ===
+                                                                                'productId').msg %>
+                                                                        </span>
+                                                                        <% } %>
+                                                                </div>
+
+                                                                <!-- Category ID Field -->
+                                                                <div id="categoryField_<%= offer._id %>"
+                                                                    style="<%= offer.type === 'category' ? 'display:block;' : 'display:none;' %>">
+                                                                    <select name="categoryId">
+                                                                        <% categories.forEach(category=> { %>
+                                                                            <option value="<%= category._id %>"
+                                                                                <%=offer.categoryId &&
+                                                                                offer.categoryId.equals(category._id)
+                                                                                ? 'selected' : '' %>><%= category.name
+                                                                                    %>
+                                                                            </option>
+                                                                            <% }) %>
+                                                                    </select>
+                                                                    <% if (validationErrors && validationErrors.some(e=>
+                                                                        e.param === 'categoryId')) { %>
+                                                                        <span class="text-danger">
+                                                                            <%= validationErrors.find(e=> e.param ===
+                                                                                'categoryId').msg %>
+                                                                        </span>
+                                                                        <% } %>
+                                                                </div>
+
+                                                                <!-- Referral Code Field -->
+                                                                <div id="referralField_<%= offer._id %>"
+                                                                    style="<%= offer.type === 'referral' ? 'display:block;' : 'display:none;' %>">
+                                                                    <input type="text" name="referralCode"
+                                                                        value="<%= offer.referralCode || '' %>"
+                                                                        placeholder="Referral Code">
+                                                                    <% if (validationErrors && validationErrors.some(e=>
+                                                                        e.param === 'referralCode')) { %>
+                                                                        <span class="text-danger">
+                                                                            <%= validationErrors.find(e=> e.param ===
+                                                                                'referralCode').msg %>
+                                                                        </span>
+                                                                        <% } %>
+                                                                </div>
+
+                                                                <!-- Expiration Date -->
+                                                                <input type="date" name="expirationDate"
+                                                                    value="<%= offer.expirationDate ? new Date(offer.expirationDate).toISOString().split('T')[0] : '' %>"
+                                                                    placeholder="Expiration Date">
+                                                                <% if (validationErrors && validationErrors.some(e=>
+                                                                    e.param === 'expirationDate')) { %>
+                                                                    <span class="text-danger">
+                                                                        <%= validationErrors.find(e=> e.param ===
+                                                                            'expirationDate').msg %>
+                                                                    </span>
+                                                                    <% } %>
+
+                                                                        <!-- Submit Button -->
+                                                                        <button type="submit">Update Offer</button>
+                                    </form>
+                                </td>
+                            </tr>
+
+
+
+                            <% } %>
+                                <% }) %>
+                </tbody>
+
+
+            </table>
+            <!-- Pagination controls -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                        <a class="page-link"
+                            href="?page=<%= currentPage - 1 %>&limit=<%= limit %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %>&filterType=<%= filterType %>"
+                            aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <% for (let i=1; i <=totalPages; i++) { %>
+                        <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                            <a class="page-link"
+                                href="?page=<%= i %>&limit=<%= limit %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %>&filterType=<%= filterType %>">
+                                <%= i %>
+                            </a>
+                        </li>
+                        <% } %>
+                            <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                                <a class="page-link"
+                                    href="?page=<%= currentPage + 1 %>&limit=<%= limit %>&sortField=<%= sortField %>&sortOrder=<%= sortOrder %>&filterType=<%= filterType %>"
+                                    aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                </ul>
+            </nav>
+
+
+            <% if (errors.length> 0) { %>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        let errorMessage = `<%= errors.map(e => e.msg).join('*') %>`;
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Validation Error',
+                            html: errorMessage,  // Make sure this is used instead of text
+                            confirmButtonText: 'OK'
+                        });
+                    });
+                </script>
+                <% } %>
+
+
+                    <script>
+                        function searchOffers() {
+                            const input = document.getElementById("offerSearch");
+                            const filter = input.value.toLowerCase();
+                            const table = document.querySelector("table");
+                            const tr = table.getElementsByTagName("tr");
+
+                            for (let i = 1; i < tr.length; i++) {
+                                const td = tr[i].getElementsByTagName("td");
+                                let found = false;
+
+                                for (let j = 0; j < td.length; j++) {
+                                    if (td[j]) {
+                                        if (td[j].textContent.toLowerCase().indexOf(filter) > -1) {
+                                            found = true;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                if (found) {
+                                    tr[i].style.display = "";
+                                } else {
+                                    tr[i].style.display = "none";
+                                }
+                            }
+                        }
+                    </script>
+
+                    <script>
+                        document.getElementById('offerType').addEventListener('change', function () {
+                            handleOfferTypeChange(this.value);
+                        });
+
+                        function handleOfferTypeChange(type) {
+                            document.getElementById('productField').style.display = type === 'product' ? 'block' : 'none';
+                            document.getElementById('categoryField').style.display = type === 'category' ? 'block' : 'none';
+                            document.getElementById('referralField').style.display = type === 'referral' ? 'block' : 'none';
+
+                            // Additional logic to populate products if needed
+                            if (type === 'product') {
+                                fetch('/admin/products')
+                                    .then(response => response.json())
+                                    .then(products => {
+                                        const productSelect = document.getElementById('productSelect');
+                                        productSelect.innerHTML = '<option value="">Select Product</option>'; // Clear previous options
+                                        products.forEach(product => {
+                                            const option = document.createElement('option');
+                                            option.value = product._id;
+                                            option.text = product.name;
+                                            productSelect.appendChild(option);
+                                        });
+                                    });
+                            }
+                        }
+
+                        function toggleUpdateForm(id) {
+                            var form = document.getElementById('updateForm_' + id);
+                            if (!form) {
+                                console.error('Update form not found for ID:', id);
+                                return;
+                            }
+                            if (form.style.display === 'none' || form.style.display === '') {
+                                form.style.display = 'table-row';
+                            } else {
+                                form.style.display = 'none';
+                            }
+                        }
+
+                        document.querySelectorAll('.offer-type-update').forEach(selectElement => {
+                            selectElement.addEventListener('change', function () {
+                                const offerId = this.dataset.offerId;
+                                const selectedType = this.value;
+
+
+
+
+                                const productField = document.getElementById(`productField_${offerId}`);
+                                const categoryField = document.getElementById(`categoryField_${offerId}`);
+                                const referralField = document.getElementById(`referralField_${offerId}`);
+
+                                // Update display based on selected offer type
+                                productField.style.display = selectedType === 'product' ? 'block' : 'none';
+                                categoryField.style.display = selectedType === 'category' ? 'block' : 'none';
+                                referralField.style.display = selectedType === 'referral' ? 'block' : 'none';
+
+                                // Handle category field change
+                                if (selectedType === 'product') {
+                                    const categoryInput = categoryField.querySelector('input[name="categoryId"]');
+                                    if (!categoryInput) {
+                                        categoryField.innerHTML = '<input type="text" name="categoryId" value="NA" readonly>';
+                                    }
+                                } else if (selectedType === 'category') {
+                                    categoryField.innerHTML = `
+                <select name="categoryId">
+                    ${categories.map(category => `<option value="${category._id}">${category.name}</option>`).join('')}
+                </select>`;
+                                }
+                            });
+                        });
+                        document.getElementById('offerType').addEventListener('change', function () {
+                            var type = this.value;
+                            document.getElementById('productField').style.display = type === 'product' ? 'block' : 'none';
+                            document.getElementById('categoryField').style.display = type === 'category' ? 'block' : 'none';
+                            document.getElementById('referralField').style.display = type === 'referral' ? 'block' : 'none';
+
+                            if (type === 'product') {
+                                fetch('/admin/products')
+                                    .then(response => response.json())
+                                    .then(products => {
+                                        const productSelect = document.getElementById('productSelect');
+                                        productSelect.innerHTML = '<option value="">Select Product</option>'; // Clear previous options
+                                        products.forEach(product => {
+                                            const option = document.createElement('option');
+                                            option.value = product._id;
+                                            option.text = product.name;
+                                            productSelect.appendChild(option);
+                                        });
+                                    })
+                                    .catch(error => console.error('Error loading products:', error));
+                            }
+                        });
+
+                        document.querySelector('form[action="/admin/offers"]').addEventListener('submit', function (event) {
+                            event.preventDefault(); // Prevent the default form submission
+
+                            const form = event.target;
+                            const formData = new FormData(form);
+
+                            // Extract values from the form
+                            const offerName = formData.get('name');
+                            const offerType = formData.get('type');
+                            const discount = formData.get('discount');
+                            const productId = formData.get('productId');
+                            const categoryId = formData.get('categoryId');
+                            const referralCode = formData.get('referralCode');
+                            const expirationDate = formData.get('expirationDate');
+
+                            let errors = [];
+
+                            // Validate name
+                            if (!offerName || offerName.length < 3) {
+                                errors.push('Offer name must be at least 3 characters long.');
+                            }
+
+                            // Validate type
+                            if (!offerType || !['product', 'category', 'referral'].includes(offerType)) {
+                                errors.push('Invalid offer type.');
+                            }
+
+                            // Validate discount
+                            if (!discount || isNaN(discount) || discount < 0 || discount > 100) {
+                                errors.push('Discount must be between 0 and 100.');
+                            }
+
+                            // Validate type-specific fields
+                            if (offerType === 'product' && !productId) {
+                                errors.push('Product is required for product offers.');
+                            } else if (offerType === 'category' && !categoryId) {
+                                errors.push('Category is required for category offers.');
+                            } else if (offerType === 'referral' && !referralCode) {
+                                errors.push('Referral code is required for referral offers.');
+                            }
+
+                            // Validate expiration date
+                            if (expirationDate) {
+                                const expiryDate = new Date(expirationDate);
+                                if (isNaN(expiryDate.getTime()) || expiryDate < new Date()) {
+                                    errors.push('Expiration date must be on or after the current date.');
+                                }
+                            }
+
+                            // Show error alert if there are validation errors
+                            if (errors.length > 0) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Validation Errors',
+                                    html: errors.join('<br>'), // Display errors
+                                });
+                            } else {
+                                // Proceed with confirmation modal if no errors
+                                Swal.fire({
+                                    title: 'Are you sure?',
+                                    text: "Do you want to create this offer?",
+                                    icon: 'question',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#204f38',
+                                    confirmButtonText: 'Yes, create it!',
+                                    cancelButtonColor: 'blanchedalmond',
+                                    cancelButtonText: '<span style="color:black;">No, Cancel</span>',
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        Swal.fire({
+                                            title: 'Created!',
+                                            text: 'The offer has been created successfully.',
+                                            icon: 'success',
+                                            confirmButtonColor: '#204f38',
+                                        }).then(() => {
+                                            form.submit();
+                                        });
+                                    }
+                                });
+                            }
+                        });
+
+
+
+
+                        //
+
+                        // Update Offer
+                        document.querySelectorAll('form[action="/admin/offers/update"]').forEach(form => {
+                            form.addEventListener('submit', function (event) {
+                                event.preventDefault(); // Prevent default submission
+
+                                const offerName = form.querySelector('input[name="name"]').value;
+                                const offerType = form.querySelector('select[name="type"]').value;
+                                const discount = form.querySelector('input[name="discount"]').value;
+                                const productField = form.querySelector('select[name="productId"]');
+                                const categoryField = form.querySelector('select[name="categoryId"]');
+                                const referralCode = form.querySelector('input[name="referralCode"]').value;
+                                const expirationDate = form.querySelector('input[name="expirationDate"]').value;
+
+                                let errors = [];
+
+                                // Validate offer name
+                                if (offerName.length < 3) {
+                                    errors.push('Offer name must be at least 3 characters long.');
+                                }
+
+                                // Validate discount
+                                if (isNaN(discount) || discount < 0 || discount > 100) {
+                                    errors.push('Discount must be a number between 0 and 100.');
+                                }
+                                if (!discount) {
+                                    errors.push('Discount persentage is required')
+                                }
+
+                                // Validate type-specific fields
+                                if (offerType === 'product' && !productField.value) {
+                                    errors.push('Please select a product for this offer.');
+                                } else if (offerType === 'category' && !categoryField.value) {
+                                    errors.push('Please select a category for this offer.');
+                                } else if (offerType === 'referral' && referralCode.length === 0) {
+                                    errors.push('Please enter a referral code.');
+                                }
+
+                                // Validate expiration date
+                                if (expirationDate && new Date(expirationDate) < new Date()) {
+                                    errors.push('Expiration date must be in the future.');
+                                }
+
+                                // If errors exist, show error alert
+                                if (errors.length > 0) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Validation Errors',
+                                        html: errors.join('<br>'), // Display errors
+                                    });
+                                } else {
+                                    // Show confirmation modal if no errors
+                                    Swal.fire({
+                                        title: 'Are you sure?',
+                                        text: "Do you want to update this offer?",
+                                        icon: 'question',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#204f38',
+                                        confirmButtonText: 'Yes, update it!',
+                                        cancelButtonColor: 'blanchedalmond',
+                                        cancelButtonText: '<span style="color:black;">No, Cancel</span>',
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            // Simulate form submission
+
+
+                                            // Show success alert after form submission
+                                            Swal.fire({
+                                                title: 'Updated!',
+                                                text: 'The offer has been updated successfully.',
+                                                icon: 'success',
+                                                confirmButtonColor: '#204f38',
+                                            }).then(() => {
+                                                form.submit();
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                        });
+
+
+                        document.querySelectorAll('form.delete-form').forEach(form => {
+                            form.addEventListener('submit', function (event) {
+                                event.preventDefault(); // Prevent the default form submission
+
+                                Swal.fire({
+                                    title: 'Are you sure?',
+                                    text: "Do you want to delete this offer?",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#204f38',
+                                    cancelButtonColor: 'blanchedalmond',
+                                    confirmButtonText: 'Yes, delete it!',
+                                    cancelButtonText: '<span style="color:black;">No, Cancel</span>',
+
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        Swal.fire({
+                                            title: 'Deleted!',
+                                            text: 'The offer has been deleted successfully.',
+                                            icon: 'success'
+                                        }).then(() => {
+                                            const form = event.target;
+                                            form.submit();
+
+                                        })
+
+                                    }
+                                });
+                            });
+                        });
+
+
+                    </script>
+                    <script>
+
+                        function applyOffer(offerId) {
+                            // Show confirmation alert before applying the offer
+                            Swal.fire({
+                                title: 'Are you sure?',
+                                text: "Do you want to apply this offer?",
+                                icon: 'question',
+                                showCancelButton: true,
+                                confirmButtonColor: '#204f38',
+                                cancelButtonColor: 'blanchedalmond',
+                                confirmButtonText: 'Yes, apply it!',
+                                cancelButtonText: '<span style="color:black;">No, Cancel!</span>',
+
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    // Proceed with applying the offer if confirmed
+                                    fetch(`/admin/offers/apply/${offerId}`, {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                    })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.success) {
+                                                Swal.fire({
+                                                    icon: 'success',
+                                                    title: 'Offer Applied Successfully',
+                                                    text: data.message,
+                                                    confirmButtonText: 'OK',
+                                                    confirmButtonColor: '#204f38',
+                                                }).then(() => {
+                                                    location.reload(); // Reload the page to reflect the changes
+                                                });
+                                            } else {
+                                                Swal.fire({
+                                                    icon: 'error',
+                                                    title: 'Error',
+                                                    text: data.message || 'Please try again later.',
+                                                    confirmButtonText: 'OK',
+                                                    confirmButtonColor: 'red',
+                                                });
+                                            }
+                                        })
+                                        .catch(error => {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'An Unexpected Error Occurred',
+                                                text: error.message || 'Please try again later.',
+                                                confirmButtonText: 'OK'
+                                            });
+                                        });
+                                } else {
+                                    // If canceled, do nothing
+                                    Swal.fire({
+                                        title: 'Cancelled',
+                                        text: 'The offer was not applied.',
+                                        icon: 'info',
+                                        confirmButtonText: 'OK'
+                                    });
+                                }
+                            });
+                        }
+
+                        function toggleFields(offerId, type) {
+                            const productField = document.getElementById(`productField_${offerId}`);
+                            const categoryField = document.getElementById(`categoryField_${offerId}`);
+                            const referralField = document.getElementById(`referralField_${offerId}`);
+
+                            if (type === 'product') {
+                                productField.style.display = 'block';
+                                categoryField.style.display = 'none';
+                                referralField.style.display = 'none';
+                            } else if (type === 'category') {
+                                productField.style.display = 'none';
+                                categoryField.style.display = 'block';
+                                referralField.style.display = 'none';
+                            } else if (type === 'referral') {
+                                productField.style.display = 'none';
+                                categoryField.style.display = 'none';
+                                referralField.style.display = 'block';
+                            }
+                        }
+
+                        // Automatically trigger field toggling when the page loads for existing data
+
+
+
+                    </script>
+
+</body>
+
+</html>

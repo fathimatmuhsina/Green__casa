@@ -1,0 +1,270 @@
+<%- include('../layouts/adminheader.ejs') %>
+
+    <div class="container mt-5">
+        <!-- Sales Report Title -->
+        <h2 class="text-center text-white" style="background-color: #204f38; padding: 10px;">Sales Report</h2>
+
+        <!-- Download Buttons -->
+        <div class="d-flex justify-content-end mb-3">
+            <form method="GET" action="/admin/sales-report" class="mr-2">
+                <input type="hidden" name="filterType" value="<%= filterType %>">
+                <input type="hidden" name="startDate" value="<%= startDate %>">
+                <input type="hidden" name="endDate" value="<%= endDate %>">
+                <input type="hidden" name="format" value="pdf">
+                <button type="submit" class="btn btn-light btn-sm"
+                    style="border-color: #204f38; color: #204f38;">Download PDF</button>
+            </form>
+            <form method="GET" action="/admin/sales-report">
+                <input type="hidden" name="filterType" value="<%= filterType %>">
+                <input type="hidden" name="startDate" value="<%= startDate %>">
+                <input type="hidden" name="endDate" value="<%= endDate %>">
+                <input type="hidden" name="format" value="excel">
+                <button type="submit" class="btn btn-dark btn-sm">Download Excel</button>
+            </form>
+        </div>
+
+        <!-- Filter Form -->
+        <form class="mb-4" method="GET" action="/admin/sales-report">
+            <div class="form-row align-items-end">
+                <div class="form-group col-md-3">
+                    <label for="filterType">Filter Type</label>
+                    <select id="filterType" name="filterType" class="form-control">
+                        <option value="default">All</option>
+                        <option value="today" <%=filterType==='today' ? 'selected' : '' %>>Today</option>
+                        <option value="yesterday" <%=filterType==='yesterday' ? 'selected' : '' %>>Yesterday</option>
+                        <option value="last7days" <%=filterType==='last7days' ? 'selected' : '' %>>Last 7 Days</option>
+                        <option value="thisMonth" <%=filterType==='thisMonth' ? 'selected' : '' %>>This Month</option>
+                        <option value="thisYear" <%=filterType==='thisYear' ? 'selected' : '' %>>This Year</option>
+                        <option value="custom" <%=filterType==='custom' ? 'selected' : '' %>>Custom</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-3" id="startDateContainer" style="display: none;">
+                    <label for="startDate">Start Date</label>
+                    <input type="date" id="startDate" name="startDate" class="form-control" value="<%= startDate %>">
+                </div>
+                <div class="form-group col-md-3" id="endDateContainer" style="display: none;">
+                    <label for="endDate">End Date</label>
+                    <input type="date" id="endDate" name="endDate" class="form-control" value="<%= endDate %>">
+                </div>
+                <div class="form-group col-md-3">
+                    <button type="submit" class="btn btn-block btn-dark">Generate Report</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Sales Report Cards -->
+        <div class="row ">
+            <div class="col-md-4">
+                <div class="card text-center shadow-sm">
+                    <div class="card-body" style="background-color: blanchedalmond;">
+                        <h5 class="card-title">Total Orders</h5>
+                        <p class="card-text font-weight-bold">
+                            <%= totalOrders %>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center shadow-sm">
+                    <div class="card-body"style="background-color: blanchedalmond;">
+                        <h5 class="card-title">Total Sales Amount</h5>
+                        <p class="card-text font-weight-bold">₹ <%= totalSalesAmount.toFixed(2) %>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center shadow-sm" >
+                    <div class="card-body" style="background-color: blanchedalmond;">
+                        <h5 class="card-title">Total Discount Given</h5>
+                        <p class="card-text font-weight-bold">₹ <%= (totalDiscount + totalCouponDiscount).toFixed(2) %>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Report Cards -->
+        <div class="row mb-2">
+            <div class="col-md-4 mb-2">
+                <div class="card text-center shadow-sm">
+                    <div class="card-body" style="background-color: blanchedalmond;">
+                        <h5 class="card-title">Cancelled Orders</h5>
+                        <p class="card-text font-weight-bold">
+                            <%= cancelledOrders %>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-2">
+                <div class="card text-center shadow-sm">
+                    <div class="card-body" style="background-color: blanchedalmond;">
+                        <h5 class="card-title">Returned Orders</h5>
+                        <p class="card-text font-weight-bold">
+                            <%= returnedOrders %>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-2">
+                <div class="card text-center shadow-sm">
+                    <div class="card-body" style="background-color: blanchedalmond;">
+                        <h5 class="card-title">Delivered Orders</h5>
+                        <p class="card-text font-weight-bold">
+                            <%= deliveredOrders %>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Details Table -->
+        <h2 class="text-dark text-center mb-2">Order Details</h2>
+        <div class="table-responsive mb-4">
+            <h4 class="mb-3">Search Orders</h4>
+            <input type="text" id="saleSearch" placeholder="Search..." onkeyup="searchSales()" class="form-control mb-3"
+                style="width: 100%;">
+
+            <table class="table table-bordered">
+                <thead class="text-white" style="background-color: #204f38;">
+                    <tr>
+                        <th>Date & Time</th>
+                        <th>Order ID</th>
+                        <th>User</th>
+                        <th>Product Name</th>
+                        <th>Category</th>
+                        <th>Quantity</th>
+                        <th>Original Price</th>
+                        <th>Total Amount</th>
+                        <th>Product Discount</th>
+                        <th>Coupon Discount</th>
+                        <th>Status</th>
+                        <th>Payment Method</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% orders.forEach(order=> { %>
+                        <% order.items.forEach(item=> { %>
+                            <tr>
+                                <td>
+                                    <%= formatDate(order.createdAt) %>
+                                </td>
+                                <td>
+                                    <%= order._id %>
+                                </td>
+                                <td>
+                                    <%= order.user ? order.user.name : 'Unknown User' %> 
+                                </td>
+                                <td>
+                                    <%= item.product.name %>
+                                </td>
+                                <td>
+                                    <%= item.product.category || '' %>
+                                </td>
+                                <td>
+                                    <%= item.quantity %>
+                                </td>
+                                <td>₹<%= (item.product.originalprice * item.quantity).toFixed(2) %>
+                                </td>
+                                <td>₹<%= order.totalAmount.toFixed(2) %>
+                                </td>
+                                <td>₹<%= (item.product.originalprice - item.product.discountprice).toFixed(2) *
+                                        item.quantity %>
+                                </td>
+                                <td>₹<%= order.discountAmount ? order.discountAmount.toFixed(2) : '0.00' %>
+                                </td>
+                                <td>
+                                    <%= order.status %>
+                                </td>
+                                <td>
+                                    <%= order.paymentMethod %>
+                                </td>
+                            </tr>
+                            <% }) %>
+                                <% }) %>
+                </tbody>
+            </table>
+
+            <!-- Pagination -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <% if (currentPage> 1) { %>
+                        <li class="page-item">
+                            <a class="page-link"
+                                href="?page=<%= currentPage - 1 %>&filterType=<%= filterType %>&startDate=<%= startDate %>&endDate=<%= endDate %>"
+                                aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <% } %>
+
+                            <% for (let i=1; i <=totalPages; i++) { %>
+                                <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                                    <a class="page-link"
+                                        href="?page=<%= i %>&filterType=<%= filterType %>&startDate=<%= startDate %>&endDate=<%= endDate %>">
+                                        <%= i %>
+                                    </a>
+                                </li>
+                                <% } %>
+
+                                    <% if (currentPage < totalPages) { %>
+                                        <li class="page-item">
+                                            <a class="page-link"
+                                                href="?page=<%= currentPage + 1 %>&filterType=<%= filterType %>&startDate=<%= startDate %>&endDate=<%= endDate %>"
+                                                aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                        <% } %>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const filterTypeSelect = document.getElementById('filterType');
+            const startDateContainer = document.getElementById('startDateContainer');
+            const endDateContainer = document.getElementById('endDateContainer');
+
+            // Function to toggle date fields based on the selected filter type
+            const toggleDateFields = () => {
+                if (filterTypeSelect.value === 'custom') {
+                    startDateContainer.style.display = 'block';
+                    endDateContainer.style.display = 'block';
+                } else {
+                    startDateContainer.style.display = 'none';
+                    endDateContainer.style.display = 'none';
+                }
+            };
+
+            // Initial check to set the correct visibility on page load
+            toggleDateFields();
+
+            // Event listener to handle changes in the filter type selection
+            filterTypeSelect.addEventListener('change', toggleDateFields);
+        });
+
+        function searchSales() {
+            const input = document.getElementById("saleSearch");
+            const filter = input.value.toLowerCase();
+            const table = document.querySelector("table");
+            const tr = table.getElementsByTagName("tr");
+
+            for (let i = 1; i < tr.length; i++) {
+                const td = tr[i].getElementsByTagName("td");
+                let found = false;
+
+                for (let j = 0; j < td.length; j++) {
+                    if (td[j] && td[j].textContent.toLowerCase().indexOf(filter) > -1) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                tr[i].style.display = found ? "" : "none";
+            }
+        }
+    </script>
+
+    <%- include('../layouts/footer.ejs') %>

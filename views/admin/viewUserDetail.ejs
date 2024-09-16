@@ -1,0 +1,195 @@
+<%- include('../layouts/adminheader.ejs') %>
+
+  <div class="row">
+    <div class="col">
+      <nav aria-label="breadcrumb" class=" rounded-3 p-3 mb-4 bg-white">
+        <ol class="breadcrumb mb-0">
+          <li class="breadcrumb-item"><a href="/admin/dashboard">Customers</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Customer detail</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+  <div class="container">
+    <div class="card-body">
+
+      <%if(users){%>
+
+        <div class="row">
+          <div class="col-lg-5">
+            <div style="background-color: #204f38;">
+              <h4 class="text-center text-white p-2">
+                <%=users.name %>-Profile
+              </h4>
+            </div>
+            <div class="card mb-4 ">
+              <div class="card-body">
+                <div class="text-center">
+                  <% if(users.image) { %>
+                    <img src="images/<%=users.image%>" alt="avatar" class="rounded-circle img-fluid"
+                      style="width: 150px; border: 3px solid #204f38;">
+                    <% } else { %>
+                      <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+                        class="rounded-circle img-fluid" style="width: 150px; border: 3px solid #204f38;">
+                      <% } %>
+
+
+
+                </div>
+
+                <hr>
+                <div class="row ">
+                  <div class="col-3">
+                    <p class="mb-0">Email</p>
+                  </div>
+                  <div class="col-9 ">
+                    <p class="text-muted mb-0">
+                      <%=users.email %>
+                    </p>
+                  </div>
+                </div>
+
+
+                <hr>
+                <div class="row">
+                  <div class="col-3 ">
+                    <p class="mb-0">Mobile</p>
+                  </div>
+                  <div class="col-9 ">
+                    <p class="text-muted mb-0">
+                      <%=users.mobile %>
+                    </p>
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col-3">
+                    <p class="mb-0">Status</p>
+                  </div>
+                  <div class="col-9">
+                    <p class="text-muted mb-0">
+                      <% if(users.is_verified){ %>
+                        <p>verified</p>
+                        <% }else{ %>
+                          <p>Not Verified</p>
+                          <% } %>
+                    </p>
+
+                  </div>
+
+                </div>
+
+
+
+              </div>
+            </div>
+
+          </div>
+          <div class="col-lg-7">
+            <div style="background-color: #204f38;">
+              <h4 class="text-center text-white p-2 ">
+                Address Details
+              </h4>
+            </div>
+            <div class="card mb-4">
+              <div class="card-body">
+
+
+
+
+
+                <% if (users.address && users.address.length> 0) { %>
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <p class="mb-0">House Name/No</p>
+                    </div>
+                    <div class="col-sm-8">
+                      <p class="text-muted mb-0">
+                        <%=users.address[0].housename ||'' %>
+                      </p>
+                    </div>
+                  </div>
+                  <hr>
+
+                  <div class="row">
+                    <div class="col-4">
+                      <p class="mb-0">Street</p>
+                    </div>
+                    <div class="col-8">
+                      <p class="text-muted mb-0">
+                        <%= users.address[0].street ||'' %>
+                      </p>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-4">
+                      <p class="mb-0">City</p>
+                    </div>
+                    <div class="col-8">
+                      <p class="text-muted mb-0">
+                        <%=users.address[0].city ||'' %>
+                      </p>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-4">
+                      <p class="mb-0">State</p>
+                    </div>
+                    <div class="col-8">
+                      <p class="text-muted mb-0">
+                        <%=users.address[0].state||'' %>
+                      </p>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-4">
+                      <p class="mb-0">Zip Code</p>
+                    </div>
+                    <div class="col-8">
+                      <p class="text-muted mb-0">
+                        <%=users.address[0].zipcode ||''%>
+                      </p>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-4">
+                      <p class="mb-0">Country</p>
+                    </div>
+                    <div class="col-8">
+                      <p class="text-muted mb-0">
+                        <%=users.address[0].country ||'' %>
+                      </p>
+                    </div>
+                  </div>
+                  <%}%>
+                    <hr>
+                    <div class="row">
+                      <div class="col-4">
+                        <p class="mb-0">Is_Blocked</p>
+                      </div>
+                      <div class="col-8">
+                        <p class="text-success mb-0">
+                          <% if(users.isBlocked){ %>
+                            <p class="text-danger">Blocked</p>
+                            <% }else{ %>
+                              <p class="text-success">Active</p>
+                              <% } %>
+                        </p>
+                      </div>
+                    </div>
+                    <%}%>
+              </div>
+            </div>
+
+          </div>
+        </div>
+    </div>
+    </section>
+  </div>
+  </div>
+
+  <%- include('../layouts/footer.ejs') %>

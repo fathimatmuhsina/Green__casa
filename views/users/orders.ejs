@@ -1,0 +1,270 @@
+<%- include('../layouts/header.ejs') %>
+
+  <!-- Breadcrumb Section Begin -->
+
+  <section class="breadcrumb-section set-bg"
+    data-setbg="https://media.istockphoto.com/id/1402801804/photo/closeup-nature-view-of-palms-and-monstera-and-fern-leaf-background.webp?b=1&s=612x612&w=0&k=20&c=cvXa4CkqbIdOXxYkgAMxz-iFN3aBRibY7HMskePBRaE=">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <div class="breadcrumb__text">
+            <h2>Orders</h2>
+            <div class="breadcrumb__option">
+              <a href="/home">Home</a>
+              <span>Orders</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Breadcrumb Section End -->
+
+  <!-- Shoping Cart Section Begin -->
+  <section class="shoping-cart spad">
+    <div class="container">
+      <div class="row mb-3">
+        <div class="col-lg-12">
+          <div class="d-flex justify-content-end">
+            <div class="btn-group" role="group">
+              <a href="/orders?filter=today"
+                class="btn btn-secondary <%= filter === 'today' ? 'active' : '' %>">Today</a>
+
+              <a href="/orders?filter=lastMonth"
+                class="btn btn-secondary <%= filter === 'lastMonth' ? 'active' : '' %>">Last Month</a>
+              <a href="/orders?filter=lastThreeMonths"
+                class="btn btn-secondary <%= filter === 'lastThreeMonths' ? 'active' : '' %>">Last 3 Months</a>
+              <a href="/orders?filter=currentYear"
+                class="btn btn-secondary <%= filter === 'currentYear' ? 'active' : '' %>">Current Year</a>
+              <a href="/orders?filter=all" class="btn btn-secondary <%= filter === 'all' ? 'active' : '' %>">All</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+
+
+
+        <div class="col-lg-12">
+          <div class="shoping__cart__table">
+            <table>
+              <thead>
+                <tr>
+                  <th class="shoping__product">Products</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th>Order ID</th>
+                  <th>Payment Method</th>
+                  <th>Status</th>
+                  <th>Payment Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% orders.forEach(order=> { %>
+                  <% order.items.forEach(item=> { %>
+                    <tr data-id="<%= item.product.id %>">
+                      <td class="shoping__cart__item">
+                        <a href="/product-detail?id=<%= item.product._id %>">
+                          <img src="/images/<%= item.product.image[0] %>" alt="">
+                        </a>
+                        <a href="/order-detail?id=<%= order._id %>">
+                          <h5>
+                            <%= item.product.name %>
+                          </h5>
+                        </a>
+                      </td>
+                      <td class="shoping__cart__price">
+                        <s class="text-danger">₹<%= (item.product.originalprice * item.quantity).toFixed(2) %></s>
+                        ₹<%= ((item.product.offerPrice || item.product.discountprice) * item.quantity).toFixed(2) %>
+
+                      </td>
+                      <td class="shoping__cart__quantity">
+                        <div class="quantity">
+                          <%= item.quantity %>
+                        </div>
+                      </td>
+                      <td class="shoping__cart__total">
+                        <%= order._id %>
+                      </td>
+                      <td class="shoping__cart__total">
+                        <%= order.paymentMethod %>
+                      </td>
+                      <td class="shoping__cart__total">
+
+                        <%= order.status %>
+
+                      </td>
+                      <td class="shoping__cart__total">
+                        <%= order.paymentStatus %>
+                      </td>
+                      <% }); %>
+                        <td>
+                          <% if (order.paymentStatus==='Payment Failed' ) { %>
+                            <button class="btn btn-primary retry-payment-btn" data-order-id="<%= order._id %>">Retry
+                              Payment</button>
+                            <% } else { %>
+                              <a href="/order-detail?id=<%= order._id %>" class="btn btn-info">View Order</a>
+                              <% } %>
+                        </td>
+                    </tr>
+
+                    <% }); %>
+              </tbody>
+
+
+
+
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="shoping__cart__btns">
+            <a href="/products" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
+            <a href="#" class="primary-btn cart-btn cart-btn-right"><span class="icon_loading"></span> Update Cart</a>
+          </div>
+        </div>
+      </div>
+      <!-- Pagination -->
+      <div class="row mt-4">
+        <div class="col-lg-12 text-center">
+          <nav aria-label="Page navigation">
+            <ul class="pagination">
+              <% if (currentPage> 1) { %>
+                <li class="page-item">
+                  <a class="page-link" href="/orders?page=<%= currentPage - 1 %>&filter=<%= filter %>">Previous</a>
+                </li>
+                <% } %>
+                  <% for (let i=1; i <=totalPages; i++) { %>
+                    <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                      <a class="page-link" href="/orders?page=<%= i %>&filter=<%= filter %>">
+                        <%= i %>
+                      </a>
+                    </li>
+                    <% } %>
+                      <% if (currentPage < totalPages) { %>
+                        <li class="page-item">
+                          <a class="page-link" href="/orders?page=<%= currentPage + 1 %>&filter=<%= filter %>">Next</a>
+                        </li>
+                        <% } %>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Shoping Cart Section End -->
+
+
+  <!-- Js Plugins -->
+  <script src="js/jquery-3.3.1.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/jquery.nice-select.min.js"></script>
+  <script src="js/jquery-ui.min.js"></script>
+  <script src="js/jquery.slicknav.js"></script>
+  <script src="js/mixitup.min.js"></script>
+  <script src="js/owl.carousel.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+  <script>
+    document.querySelectorAll('.retry-payment-btn').forEach(button => {
+      button.addEventListener('click', async () => {
+        const orderId = button.getAttribute('data-order-id');
+        try {
+          const response = await fetch(`/retry-payment/${orderId}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          });
+
+          const data = await response.json();
+          if (data.success) {
+            // Initialize Razorpay payment
+            const options = {
+              key: data.razorpayKey,
+              amount: data.amount,
+              currency: data.currency,
+              name: data.name,
+              description: data.description,
+              image: data.image,
+              order_id: data.orderId, // Pass the Razorpay order ID
+              handler: function (response) {
+                // Handle successful payment
+                fetch(`/verifyPayment`, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    razorpayPaymentId: response.razorpay_payment_id,
+                    razorpayOrderId: response.razorpay_order_id,
+                    razorpaySignature: response.razorpay_signature,
+                  })
+                }).then(response => response.json())
+                  .then(data => {
+                    if (data.success) {
+                      Swal.fire({
+                        title: 'Payment Successful!',
+                        text: 'Your payment was successfully processed.',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                      }).then(() => {
+                        window.location.href = `/orders`;
+                      });
+                    } else {
+                      Swal.fire({
+                        title: 'Payment Verification Failed',
+                        text: 'There was an issue verifying your payment. Please try again.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                      });
+                    }
+                  });
+              },
+              prefill: {
+                name: data.prefill.name,
+                email: data.prefill.email,
+                contact: data.prefill.contact,
+              },
+              theme: {
+                color: data.theme.color,
+              },
+              notes: {
+                address: data.notes.address,
+              },
+            };
+
+            const rzp = new Razorpay(options);
+            rzp.open();
+          } else {
+            Swal.fire({
+              title: 'Payment Error',
+              text: data.message,
+              icon: 'error',
+              confirmButtonText: 'OK'
+            });
+          }
+        } catch (error) {
+          console.error('Error during payment retry:', error);
+          Swal.fire({
+            title: 'Payment Error',
+            text: 'Something went wrong. Please try again.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        }
+      });
+    });
+
+  </script>
+  <!-- Footer Section Begin -->
+  <%- include('../layouts/footer.ejs') %>
+    <!-- Footer Section End -->
+
+    </body>
+
+    </html>

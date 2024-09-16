@@ -1,0 +1,245 @@
+<%- include('../layouts/adminheader.ejs') %>
+  <div style="background-color: #fff6f4;">
+    <div class="col-lg-12 container pt-3">
+      <h3>Dashboard</h3>
+
+    </div>
+  </div>
+  <section class="hero">
+    <div class="container">
+      <div class="col-md-12 mt-5">
+        <div class="row">
+          <div class="col-md-6">
+
+            <div class="text-center shadow-sm ">
+              <div class="card-body bg-dark text-white">
+                <h4>Total Customers</h4>
+                <h2 id="totalUsers">0</h2> 
+              </div>
+
+            </div>
+          </div>
+          <div class="col-md-6">
+
+            <div class="text-center shadow-sm">
+              <div class="card-body bg-dark text-white">
+                <h4>Total Products</h4>
+                <h2 id="totalProducts">0</h2> 
+              </div>
+
+            </div>
+          </div>        </div>
+      </div>
+      <div class="col-md-12 mt-5">
+        <div class="row">
+          <div class="col-md-5">
+            <!-- Filters -->
+            <div style="margin-bottom: 20px;">
+              <select id="filterSelect" onchange="renderCharts()">
+                <option value="monthly">Monthly</option>
+                <option value="yearly">Yearly</option>
+              </select>
+
+              <div id="customDateInputs" style="display: none; margin-top: 10px;">
+                <input type="date" id="startDate" placeholder="Start Date">
+                <input type="date" id="endDate" placeholder="End Date">
+                <button onclick="renderCharts()">Apply</button>
+              </div>
+            </div>
+
+            <!-- Chart for Sales Data -->
+            <h4 style="text-align: center; margin-bottom: 20px;">Sales Data</h4>
+            <div style="margin-bottom: 40px;">
+              <canvas id="salesChart" style="width: 100%; height: 200px;"></canvas>
+            </div>
+          </div>
+          <div class="col-md-7">
+            <div class="row">
+              <div class="col-md-6"> <!-- Chart for Top Products -->
+                <h4 style="text-align: center; margin-bottom: 20px;" class="mt-5">Top 10 Best Selling Products</h4>
+                <div style="margin-bottom: 40px;">
+                  <canvas id="topProductsChart" style="width: 100%; height: 400px;"></canvas>
+
+                </div>
+              </div>
+              <div class="col-md-6"> <!-- Chart for Top Categories -->
+                <h4 style="text-align: center; margin-bottom: 20px;" class="mt-5">Top 10 Best Selling Categories</h4>
+                <div style="margin-bottom: 40px;">
+                  <canvas id="topCategoriesChart" style="width: 100%; height: 400px;"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+        </div>
+      </div>
+      <script>
+        document.getElementById('filterSelect').addEventListener('change', function () {
+          const filter = this.value;
+          const customDateInputs = document.getElementById('customDateInputs');
+          customDateInputs.style.display = (filter === 'custom') ? 'block' : 'none';
+        });
+
+        async function fetchChartData() {
+          const filter = document.getElementById('filterSelect').value;
+          let url = `/admin/chart-data?filter=${filter}`;
+
+          if (filter === 'custom') {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            url += `&startDate=${startDate}&endDate=${endDate}`;
+          }
+
+          const response = await fetch(url);
+          const data = await response.json();
+          return data;
+        }
+
+        let salesChart = null;
+        let topProductsChart = null;
+        let topCategoriesChart = null;
+
+        async function renderCharts() {
+          try {
+            const salesData = await fetchChartData();
+            const topProducts = await fetchTopProducts();
+            const topCategories = await fetchTopCategories();
+
+            // Destroy existing charts if they exist
+            if (salesChart) {
+              salesChart.destroy();
+            }
+            if (topProductsChart) {
+              topProductsChart.destroy();
+            }
+            if (topCategoriesChart) {
+              topCategoriesChart.destroy();
+            }
+
+            // Clear canvas size to ensure proper rendering
+            const clearCanvas = (canvas) => {
+              const ctx = canvas.getContext('2d');
+              canvas.width = canvas.width; // This will clear the canvas and reset size
+              return ctx;
+            };
+
+            // Initialize new charts
+            const salesChartCanvas = document.getElementById('salesChart');
+            const salesChartCtx = clearCanvas(salesChartCanvas);
+            salesChart = new Chart(salesChartCtx, {
+              type: 'line',
+              data: {
+                labels: salesData.map(d => d._id),
+                datasets: [{
+                  label: 'Sales',
+                  data: salesData.map(d => d.totalAmount),
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  borderWidth: 1,
+                  fill: false
+                }]
+              }
+            });
+
+            const topProductsChartCanvas = document.getElementById('topProductsChart');
+            const topProductsChartCtx = clearCanvas(topProductsChartCanvas);
+            topProductsChart = new Chart(topProductsChartCtx, {
+              type: 'bar',
+              data: {
+                labels: topProducts.map(p => p.product.name),
+                datasets: [{
+                  label: 'Quantity Sold',
+                  data: topProducts.map(p => p.totalQuantity),
+                  backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                  borderColor: 'rgba(255, 99, 132, 1)',
+                  borderWidth: 1
+                }]
+              }
+            });
+
+            const topCategoriesChartCanvas = document.getElementById('topCategoriesChart');
+            const topCategoriesChartCtx = clearCanvas(topCategoriesChartCanvas);
+            topCategoriesChart = new Chart(topCategoriesChartCtx, {
+              type: 'pie',
+              data: {
+                labels: topCategories.map(c => c._id),
+                datasets: [{
+                  label: 'Quantity Sold',
+                  data: topCategories.map(c => c.totalQuantity),
+                  backgroundColor: [
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(255, 205, 86, 0.2)',
+                    'rgba(201, 203, 207, 0.2)',
+                    'rgba(54, 162, 235, 0.2)'
+                  ],
+                  borderColor: [
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(255, 205, 86, 1)',
+                    'rgba(201, 203, 207, 1)',
+                    'rgba(54, 162, 235, 1)'
+                  ],
+                  borderWidth: 1
+                }]
+              }
+            });
+
+          } catch (error) {
+            console.error('Error rendering charts:', error.message);
+          }
+        }
+
+
+        async function fetchTopProducts() {
+          const filter = document.getElementById('filterSelect').value;
+          let url = `/admin/top-products?filter=${filter}`;
+
+          if (filter === 'custom') {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            url += `&startDate=${startDate}&endDate=${endDate}`;
+          }
+
+          const response = await fetch(url);
+          const data = await response.json();
+          return data;
+        }
+
+        async function fetchTopCategories() {
+          const filter = document.getElementById('filterSelect').value;
+          let url = `/admin/top-categories?filter=${filter}`;
+
+          if (filter === 'custom') {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            url += `&startDate=${startDate}&endDate=${endDate}`;
+          }
+
+          const response = await fetch(url);
+          const data = await response.json();
+          return data;
+        }
+
+
+        // Initialize Charts on page load
+        renderCharts();
+      </script><script>
+  async function fetchDashboardStats() {
+    try {
+      const response = await fetch('/admin/dashboard-stats');
+      const data = await response.json();
+      document.getElementById('totalUsers').textContent = data.totalUsers;
+      document.getElementById('totalProducts').textContent = data.totalProducts;
+    } catch (error) {
+      console.error('Error fetching dashboard stats:', error.message);
+    }
+  }
+
+  // Call fetchDashboardStats when the page loads
+  fetchDashboardStats();
+</script>
+
+
+      <%- include('../layouts/footer.ejs') %>

@@ -1,0 +1,148 @@
+<%- include('../layouts/header.ejs') %>
+
+  <!-- Breadcrumb Section Begin -->
+  <section class="breadcrumb-section set-bg"
+    data-setbg="https://images.herzindagi.info/image/2023/Oct/ornamental-plants-at-home.jpg">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <div class="breadcrumb__text">
+            <h2>Checkout</h2>
+            <div class="breadcrumb__option">
+              <a href="/checkout">Checkout</a>
+              <span>Edit Delivery Address</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Breadcrumb Section End -->
+
+  <!-- Edit Address Section Begin -->
+  <section class="checkout spad">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="checkout__form">
+            <h4>Edit Delivery Address</h4>
+            <form id="edit-address-form" method="POST" action="/edit-deliveryaddress">
+              <div class="row">
+                <div class="col-lg-6 col-md-6">
+                  <div class="checkout__input">
+                    <input type="hidden" name="address_id" value="<%= address._id %>">
+                    <input type="hidden" name="user_id" value="<%= user._id %>">
+
+                    <p>House Name<span>*</span></p>
+                    <input type="text" name="housename" value="<%= address.housename %>">
+                    <% if (errors && errors.housename) { %>
+                      <div class="text-danger">
+                        <%= errors.housename.msg %>
+                      </div>
+                      <% } %>
+                  </div>
+                  <div class="checkout__input">
+                    <p>Street<span>*</span></p>
+                    <input type="text" name="street" value="<%= address.street %>">
+                    <% if (errors && errors.street) { %>
+                      <div class="text-danger">
+                        <%= errors.street.msg %>
+                      </div>
+                      <% } %>
+                  </div>
+                  <div class="checkout__input">
+                    <p>City<span>*</span></p>
+                    <input type="text" name="city" value="<%= address.city %>">
+                    <% if (errors && errors.city) { %>
+                      <div class="text-danger">
+                        <%= errors.city.msg %>
+                      </div>
+                      <% } %>
+                  </div>
+                  <div class="checkout__input">
+                    <p>State<span>*</span></p>
+                    <input type="text" name="state" value="<%= address.state %>">
+                    <% if (errors && errors.state) { %>
+                      <div class="text-danger">
+                        <%= errors.state.msg %>
+                      </div>
+                      <% } %>
+                  </div>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                  <div class="checkout__input">
+                    <p>Country<span>*</span></p>
+                    <input type="text" name="country" value="<%= address.country %>">
+                    <% if (errors && errors.country) { %>
+                      <div class="text-danger">
+                        <%= errors.country.msg %>
+                      </div>
+                      <% } %>
+                  </div>
+                  <div class="checkout__input">
+                    <p>Zipcode<span>*</span></p>
+                    <input type="text" name="zipcode" value="<%= address.zipcode %>">
+                    <% if (errors && errors.zipcode) { %>
+                      <div class="text-danger">
+                        <%= errors.zipcode.msg %>
+                      </div>
+                      <% } %>
+                  </div>
+                  <div class="checkout__input">
+                    <p>Mobile Number<span>*</span></p>
+                    <input type="text" name="mobile" value="<%= address.mobile %>">
+                    <% if (errors && errors.mobile) { %>
+                      <div class="text-danger">
+                        <%= errors.mobile.msg %>
+                      </div>
+                      <% } %>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 text-center">
+                  <button type="submit" class="site-btn">Save Address</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Edit Address Section End -->
+
+  <!-- Js Plugins -->
+  <script src="js/jquery-3.3.1.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/jquery.nice-select.min.js"></script>
+  <script src="js/jquery-ui.min.js"></script>
+  <script src="js/jquery.slicknav.js"></script>
+  <script src="js/mixitup.min.js"></script>
+  <script src="js/owl.carousel.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    document.getElementById('edit-address-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#204f38',
+
+        confirmButtonText: 'Yes, save it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+
+          this.submit();
+
+
+        }
+      });
+    });
+  </script>
+  </body>
+
+  </html>

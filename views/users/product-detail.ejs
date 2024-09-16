@@ -1,0 +1,268 @@
+<%- include('../layouts/detailheader.ejs') %>
+
+
+
+  <!-- Hero Section Begin -->
+
+  <div class="row">
+    <div class="col">
+      <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
+        <ol class="breadcrumb mb-0">
+          <li class="breadcrumb-item"><a href="/home">Home</a></li>
+          <li class="breadcrumb-item"><a href="/products">Products</a></li>
+          <li class="breadcrumb-item active" aria-current="page">product detail</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+  <section class="hero">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3">
+
+        </div>
+        <% if(products){ %>
+          <div class="col-lg-9">
+            <h3>
+              <%= products.name%>
+            </h3>
+
+          </div>
+
+      </div>
+    </div>
+    </div>
+
+    </div>
+    </div>
+    <!-- Heading -->
+    </header>
+
+    <!-- content -->
+    <section class="py-5">
+      <div class="container">
+        <div class="row gx-5">
+          <aside class="col-lg-6">
+            <div class=" mb-3 d-flex justify-content-center">
+              <a data-fslightbox="mygalley" class="rounded-4" target="_blank" data-type="image" href="#"
+                onclick="return false;">
+                <img id="mainImage" style="max-width: 100%; max-height: 50vh; margin: auto;" class="rounded-4 fit"
+                  src="/images/<%= products.image[0]%>" />
+              </a>
+            </div>
+
+            <div class="d-flex justify-content-center mb-3">
+              <% for(let i=0; i < products.image.length; i++) { %>
+                <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image" href="#"
+                  class="item-thumb" onclick="return false;">
+                  <img onclick="updateMainImage('<%= products.image[i] %>')" width="60" height="60" class="rounded-2"
+                    src="/images/<%= products.image[i] %>" />
+                </a>
+                <% } %>
+            </div>
+          </aside>
+
+          <main class="col-lg-6">
+            <div class="ps-lg-3">
+              <h4 class="title text-dark">
+
+              </h4>
+              <div class="d-flex flex-row my-3">
+                <div class="text-danger mb-1 me-2">
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fas fa-star-half-alt"></i>
+                  <span class="ms-1">
+                    4.5
+                  </span>
+                </div>
+
+                <span class="text-muted"><i class="fas fa-shopping-basket fa-sm mx-1"></i></span>
+                <% if(products.stock>0){%>
+                  <span class="text-success ms-2">In stock</span>
+                  <% }else{%>
+                    <span class="text-danger ms-2">Out of stock</span>
+
+                    <%}%>
+
+              </div>
+
+              <div class="mb-3">
+                <span class="h4"><s style="color: red;">
+                    <%=products.originalprice%>
+                  </s></span>
+
+                <span class="h5">
+                  <%=products.discountprice%>
+                </span>
+
+              </div>
+
+              <p>
+                <%= products.description%>
+              </p>
+
+              <div class="row">
+                <dt class="col-3">Category:</dt>
+                <dd class="col-9">
+                  <%=products.category%>
+                </dd>
+              </div>
+
+              <hr />
+
+              <!-- col.// -->
+              <div class="col-md-4 col-6 mb-3">
+
+                <div class="input-group" style="max-width: 170px;">
+
+                </div>
+              </div>
+
+            </div>
+            <% } else{ %>
+
+              <tp>Products Not found</p>
+
+                <% } %>
+                  <a href="#" class="btn shadow-0 text-white add-to-cart" data-id="<%= products._id %>"
+                    style="background-color: #204f38;"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </a>
+
+                  <a href="#"
+                    class="btn btn-light border border-danger py-2 icon-hover px-3 text-danger add-to-wishlist"
+                    data-id="<%= products._id %>"> <i class="me-1 fa fa-heart fa-lg text-danger"></i> Save </a>
+        </div>
+        </main>
+      </div>
+      </div>
+    </section>
+    <!-- content -->
+
+    <section class="bg-light border-top py-4">
+      <div class="container">
+        <div class="row gx-4">
+          <div class="col-lg-8 mb-4">
+            <div class="border rounded-2 px-3 py-2 bg-white">
+              <!-- Pills navs -->
+              <ul class="nav nav-pills nav-justified mb-3 " id="ex1" role="tablist">
+                <li class="nav-item d-flex  " role="presentation">
+                  <a class="  nav-link d-flex align-items-center justify-content-center w-100 active"
+                    style="background-color: #204f38;" id="ex1-tab-1" data-mdb-toggle="pill" href="#ex1-pills-1"
+                    role="tab" aria-controls="ex1-pills-1" aria-selected="true">Specification</a>
+                </li>
+              </ul>
+              <!-- Pills navs -->
+
+              <!-- Pills content -->
+              <% if(products){ %>
+                <div class="tab-content" id="ex1-content">
+                  <div class="tab-pane fade show active" id="ex1-pills-1" role="tabpanel" aria-labelledby="ex1-tab-1">
+                    <p>
+                      <%= products.description %>
+                    </p>
+
+                    <table class="table border mt-3 mb-2">
+                      <tr>
+                        <th class="py-2">Name</th>
+                        <td class="py-2">
+                          <%= products.name %>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th class="py-2">Price</th>
+                        <td class="py-2">
+                          <%= products.discountprice %>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th class="py-2">Review</th>
+                        <td class="py-2">4.5</td>
+                      </tr>
+                    </table>
+
+                  </div>
+                  <% } else{ %>
+
+                    <tp>Products Not found</p>
+
+                      <% } %>
+                </div>
+                <!-- Pills content -->
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="px-0  shadow-0">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Similar items</h5>
+                  <% relatedProducts.forEach(relatedProduct=> { %>
+                    <div class="d-flex mb-3">
+                      <a href="/product-detail?id=<%= relatedProduct._id %>" class="me-3">
+                        <% if (relatedProduct.image && relatedProduct.image.length> 0) { %>
+                          <img src="/images/<%= relatedProduct.image[0] %>" class="img-md img-thumbnail"
+                            alt="<%= relatedProduct.name %>" />
+                          <% } %>
+                      </a>
+                      <div class="info">
+                        <a href="/product-detail?id=<%= relatedProduct._id %>" class="nav-link mb-1 text-dark">
+                          <%= relatedProduct.name %> <br />
+                        </a>
+                        <strong class="text-dark"> ₹<%= relatedProduct.discountprice %> </strong>
+                      </div>
+                    </div>
+                    <% }); %>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </section>
+    <!-- Footer -->
+    <%- include('../layouts/userfooter.ejs') %>
+
+
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          const mainImage = document.getElementById('mainImage');
+          const zoom = mediumZoom(mainImage);
+        });
+      </script>
+
+      <script>
+
+        function updateMainImage(imageUrl) {
+          document.getElementById("mainImage").src = "/images/" + imageUrl;
+        }
+        document.getElementById("increaseButton").addEventListener("click", function () {
+          var quantityInput = document.getElementById("quantityInput");
+          var currentValue = parseInt(quantityInput.value);
+          quantityInput.value = currentValue + 1;
+        });
+
+        document.getElementById("decreaseButton").addEventListener("click", function () {
+          var quantityInput = document.getElementById("quantityInput");
+          var currentValue = parseInt(quantityInput.value);
+          if (currentValue > 1) {
+            quantityInput.value = currentValue - 1;
+          }
+        });
+
+      </script>
+      <script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script>
+
+      <!-- Footer -->
+      <script src="js/jquery-3.3.1.min.js"></script>
+      <script src="js/bootstrap.min.js"></script>
+      <script src="js/jquery.nice-select.min.js"></script>
+      <script src="js/jquery-ui.min.js"></script>
+      <script src="js/jquery.slicknav.js"></script>
+      <script src="js/mixitup.min.js"></script>
+      <script src="js/owl.carousel.min.js"></script>
+      <script src="js/main.js"></script>
+
+      <%- include('../layouts/footer.ejs') %>

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Meta and CSS links -->
+  <meta charset="UTF-8">
+
+  <!-- Css Styles -->
+  <meta charset="UTF-8">
+  <meta name="description" content="Ogani Template">
+  <meta name="keywords" content="Ogani, unica, creative, html">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Green Casa</title>
+  <link rel="icon" type="image/x-icon" href="/images/greencasa.jpg">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+  <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="css/elegant-icons.css" type="text/css">
+  <link rel="stylesheet" href="css/nice-select.css" type="text/css">
+  <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css">
+  <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
+  <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
+  <link rel="stylesheet" href="css/style.css" type="text/css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    .image-container {
+      position: relative;
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    .image-container img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+    }
+
+    .delete-btn {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: #fff;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      background: #f44336;
+      color: #fff;
+    }
+  </style>
+</head>
+<header class="header">
+  <div class="header__top">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 col-md-6">
+          <div class="header__top__left">
+
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6">
+          <div class="header__top__right">
+            <div class="header__top__right__social">
+              <a href="#"><i class="fa fa-facebook"></i></a>
+              <a href="#"><i class="fa fa-twitter"></i></a>
+              <a href="#"><i class="fa fa-linkedin"></i></a>
+              <a href="#"><i class="fa fa-pinterest-p"></i></a>
+            </div>
+
+            <div class="header__top__right__auth">
+              <a href="/admin/logout" class="text-white"><i class="fa fa-user"></i>LogOut</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="background-color: blanchedalmond;">
+    <div class="container ">
+      <div class="row">
+        <div class="col-lg-2">
+          <div class="header__logo">
+            <a href="#" style="font-size: xx-large; color: green;"><i class="fa-solid fa-seedling"
+                style="color: green;"></i><b>Green Casa</b></a>
+
+          </div>
+        </div>
+        <div class="col-lg-10 pt-3">
+
+
+          <nav class="header__menu ">
+            <ul>
+              <li><a href="/admin/home">DASHBOARD</a></li>
+              <li><a href="/admin/dashboard">COSTUMERS</a></li>
+
+              <li><a href="/admin/view-products">PRODUCTS</a></li>
+
+              <li><a href="/admin/view-category">CATEGORY</a></li>
+              <li><a href="/admin/view-orders">ORDERS</a></li>
+              <li><a href="/admin/inventory">INVENTORY</a></li>
+              <li><a href="/admin/profile">PROFILE</a></li>
+              <li><a href="/admin/offers">OFFER</a></li>
+              <li><a href="/admin/coupons">Coupon</a></li>
+              <li><a href="/admin/sales-report">SALES</a></li>
+
+            </ul>
+          </nav>
+
+        </div>
+
+      </div>
+      <!-- <div class="humberger__open">
+          <i class="fa fa-bars"></i>
+      </div> -->
+    </div>
+  </div>
+  <section class="vh-100" style="background-color: #ede8e9;">
+    <div class="row">
+      <div class="col">
+        <nav aria-label="breadcrumb" class=" rounded-3 p-3 mb-4 bg-white">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="/admin/home">Home</a></li>
+            <li class="breadcrumb-item"><a href="/admin/view-products">Products</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Edit product</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+    <div class="container ">
+      <div class="row d-flex justify-content-center align-items-center ">
+
+        <div class="col col-xl-12">
+          <div class="card border border-success"
+            style="border-radius: 1rem; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);">
+            <form action="/admin/edit-product" method="post" enctype="multipart/form-data">
+              <div style="background-color: #204f38;border-radius: 1rem 1rem 0rem  0rem;">
+                <h4 class="text-uppercase text-center text-white py-2 mb-3">Edit Product</h4>
+              </div>
+              <div class="row g-0">
+
+
+
+                <div class="col-md-4 col-lg-4 mt-5">
+                  <div class="container">
+                    <div class="form-outline mb-1">
+                      <label for="imageInput" class="form-label">Upload Product Images</label>
+                      <label for="imageInput" class="btn"
+                        style="cursor: pointer; background-color: blanchedalmond; border-color: #204f38;">Upload
+                        Image</label>
+
+                      <input type="file" multiple="multiple" name="image" id="imageInput"
+                        class="form-control form-control-md <% if (errors && errors.image) { %> error-border <% } %>"
+                        style="display: none;">
+                    </div>
+                    <% if (errors && errors.image) { %>
+                      <p class="error-text" style="color: red; font-size: 15px;">
+                        <%= errors.image.msg %>
+                      </p>
+                      <% } %>
+                        <div class="image-preview" id="imagePreview">
+                          <% if (products.image && products.image.length> 0) { %>
+                            <% products.image.forEach(function(image, index) { %>
+                              <div class="image-container">
+                                <img src="/images/<%= image %>" alt="Product Image">
+                                <span class="delete-btn" onclick="removeImage('<%= image %>')" title="Close">X</span>
+                                <input type="hidden" name="existingImages" value="<%= image %>">
+                              </div>
+                              <% }); %>
+                                <% } %>
+                        </div>
+                  </div>
+                </div>
+                <div class="col-md-8 col-lg-8 d-flex align-items-center">
+                  <div class="card-body p-4 p-lg-5 text-black">
+
+
+                    <div class="form-group mb-1">
+                      <label class="form-label col-md-3" for="form3Example1cg">Name</label>
+                      <div class="col-md-6">
+                        <input type="text" value="<%= products && products.name ? products.name : '' %>" name="name"
+                          class="form-control form-control-md <% if (errors && errors.name) { %> error-border <% } %>">
+                      </div>
+                      <div class="col-md-3 error-container">
+                        <% if (errors && errors.name) { %>
+                          <p class="error-text" style="color: red; font-size: 15px;">
+                            <%= errors.name.msg %>
+                          </p>
+                          <% } %>
+                      </div>
+                    </div>
+
+
+                    <div class="form-outline mb-3">
+                      <div class="form-group mb-1 ">
+                        <label class="form-label col-md-3" for="form3Example1cg">Description</label>
+                        <div class="col-md-6">
+                          <textarea name="description"
+                            class="form-control form-control-md <% if (errors && errors.description) { %> error-border <% } %>"><%= products && products.description ? products.description : '' %></textarea>
+                        </div>
+                        <div class="col-md-3 error-container">
+                          <% if (errors && errors.description) { %>
+                            <p class="error-text" style="color: red; font-size: 15px;">
+                              <%= errors.description.msg %>
+                            </p>
+                            <% } %>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-outline mb-3">
+                      <div class="form-outline mb-3">
+                        <div class="form-group mb-1">
+                          <label class="form-label col-md-3" for="category">Category</label>
+                          <div class="col-md-6">
+                            <% if (category && category.length> 0) { %>
+                              <select
+                                class="form-select form-outline mb-1 <% if (errors && errors.category) { %> error-border <% } %>"
+                                name="category" aria-label="Default select example">
+                                <option disabled>Select Category</option>
+                                <% category.forEach(function(cat) { %>
+                                  <option value="<%= cat.name %>" <%=products.category===cat.name ? 'selected' : '' %>>
+                                    <%= cat.name %>
+                                  </option>
+
+                                  <% }); %>
+                              </select>
+                              <% } else { %>
+                                <p>Category Not found</p>
+                                <% } %>
+                          </div>
+                          <div class="col-md-3 error-container">
+                            <% if (errors && errors.category) { %>
+                              <p class="error-text" style="color: red; font-size: 15px;">
+                                <%= errors.category.msg %>
+                              </p>
+                              <% } %>
+                          </div>
+                        </div>
+                      </div>
+
+
+                    </div>
+
+                    <div class="form-outline mb-3">
+                      <div class="form-group mb-1 ">
+                        <label class="form-label col-md-3" for="form3Example3cg">Original Price</label>
+                        <div class="col-md-6">
+                          <input type="number"
+                            value="<%= products && products.originalprice ? products.originalprice : '' %>"
+                            name="originalprice"
+                            class="form-control form-control-md <% if (errors && errors.originalprice) { %> error-border <% } %>">
+                        </div>
+                        <div class="col-md-3 error-container">
+                          <% if (errors && errors.originalprice) { %>
+                            <p class="error-text" style="color: red; font-size: 15px;">
+                              <%= errors.originalprice.msg %>
+                            </p>
+                            <% } %>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-outline mb-3">
+                      <div class="form-group mb-1 ">
+                        <label class="form-label col-md-3" for="form3Example4c">Discount Price</label>
+                        <div class="col-md-6">
+                          <input type="number"
+                            value="<%= products && products.discountprice ? products.discountprice : '' %>"
+                            name="discountprice"
+                            class="form-control form-control-md <% if (errors && errors.discountprice) { %> error-border <% } %>">
+                        </div>
+                        <div class="col-md-3 error-container">
+                          <% if (errors && errors.discountprice) { %>
+                            <p class="error-text" style="color: red; font-size: 15px;">
+                              <%= errors.discountprice.msg %>
+                            </p>
+                            <% } %>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-outline mb-3">
+                      <div class="form-group mb-1 ">
+                        <label class="form-label col-md-3" for="form3Example4c">Offer Price</label>
+                        <div class="col-md-6">
+                          <input type="number" value="<%= products && products.offerPrice ? products.offerPrice : '' %>"
+                            name="offerPrice"
+                            class="form-control form-control-md <% if (errors && errors.offerPrice) { %> error-border <% } %>">
+                        </div>
+                        <div class="col-md-3 error-container">
+                          <% if (errors && errors.offerPrice) { %>
+                            <p class="error-text" style="color: red; font-size: 15px;">
+                              <%= errors.offerPrice.msg %>
+                            </p>
+                            <% } %>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-outline mb-3">
+                      <div class="form-group mb-1 ">
+                        <label class="form-label col-md-3" for="form3Example4cdg">Stock</label>
+                        <div class="col-md-6">
+                          <input type="number" value="<%= products && products.stock ? products.stock : '' %>"
+                            name="stock"
+                            class="form-control form-control-md <% if (errors && errors.stock) { %> error-border <% } %>">
+                        </div>
+                        <div class="col-md-3 error-container">
+                          <% if (errors && errors.stock) { %>
+                            <p class="error-text" style="color: red; font-size: 15px;">
+                              <%= errors.stock.msg %>
+                            </p>
+                            <% } %>
+                        </div>
+                      </div>
+                    </div>
+
+                    <input type="hidden" name="id" value="<%= products._id %>">
+                    <div class="d-flex justify-content-center col-md-4 mt-3">
+                      <button type="submit" style="background-color: #204f38;"
+                        class="btn btn-block btn-md gradient-custom-4 text-white">Update Product</button>
+                    </div>
+
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    </div>
+    </div>
+  </section>
+
+  <script>
+
+    const imageInput = document.getElementById('imageInput');
+    const imagePreview = document.getElementById('imagePreview');
+
+    // Maximum number of images allowed
+    const maxImages = 5;
+
+    imageInput.addEventListener('change', function () {
+      const files = this.files;
+      const validImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+
+      // Check the number of existing images in the preview
+      const existingImagesCount = imagePreview.getElementsByClassName('image-container').length;
+
+      // If the total number of images exceeds the limit, show an error
+      if (existingImagesCount + files.length > maxImages) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Image limit exceeded',
+          text: `You can only upload a maximum of ${maxImages} images.`,
+          confirmButtonColor: 'red'
+        });
+        return;
+      }
+
+      for (const file of files) {
+        // Validate file size (must be <= 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+          Swal.fire({
+            icon: 'error',
+            title: 'File too large',
+            text: `File is too large: ${file.name}. Maximum size is 5MB.`,
+            confirmButtonColor: 'red'
+          });
+          continue;
+        }
+
+        // Validate file type (must be an image)
+        if (!validImageTypes.includes(file.type)) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Invalid file type',
+            text: `File type not allowed: ${file.name}. Only JPEG, PNG, WebP, and GIF are allowed.`,
+            confirmButtonColor: 'red'
+          });
+          continue;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const div = document.createElement('div');
+          div.classList.add('image-container');
+          div.innerHTML = `<img src="${e.target.result}" alt="Product Image">
+                             <span class="delete-btn" onclick="removePreviewImage(this)">X</span>`;
+          imagePreview.appendChild(div);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+
+    function removeImage(image) {
+      // Find the image container and remove it
+      const imageContainer = document.querySelector(`input[value="${image}"]`).closest('.image-container');
+      if (imageContainer) {
+        imageContainer.remove();
+      }
+      // Add the image to the list of deleted images
+      const deletedImagesInput = document.createElement('input');
+      deletedImagesInput.type = 'hidden';
+      deletedImagesInput.name = 'deletedImages';
+      deletedImagesInput.value = image;
+      document.querySelector('form').appendChild(deletedImagesInput);
+    }
+
+    function removePreviewImage(element) {
+      element.closest('.image-container').remove();
+    }
+
+  </script>
+
+  <% if (typeof message !=='undefined' ) { %>
+    <script>
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Product Updated Successfully!',
+        confirmButtonColor: '#204f38'
+      }).then(() => {
+        window.location.href = '/admin/view-products'
+      });
+    </script>
+    <% } %>
+
+
+      <%- include('../layouts/footer.ejs') %>
+        </body>
+
+</html>

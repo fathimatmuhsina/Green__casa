@@ -1,0 +1,173 @@
+<%- include('../layouts/detailheader.ejs') %>
+
+
+  <div class="row">
+    <div class="col">
+      <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
+        <ol class="breadcrumb mb-0">
+          <li class="breadcrumb-item"><a href="/home">Home</a></li>
+          <li class="breadcrumb-item"><a href="/profile">Profile</a></li>
+
+          <li class="breadcrumb-item active" aria-current="page">Add new Address</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card mb-4 text-center">
+          <div class="card-body">
+            <% if (user.image) { %>
+              <img src="images/<%= user.image %>" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+              <% } else { %>
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+                  class="rounded-circle img-fluid" style="width: 150px;">
+                <% } %>
+                  <h5 class="my-3">
+                    <%= user.name %>
+                  </h5>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <p class="mb-0">Email</p>
+                    </div>
+                    <div class="col-sm-9">
+                      <p class="text-muted mb-0">
+                        <%= user.email %>
+                      </p>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <p class="mb-0">Mobile</p>
+                    </div>
+                    <div class="col-sm-9">
+                      <p class="text-muted mb-0">
+                        <%= user.mobile %>
+                      </p>
+                    </div>
+                  </div>
+                  <hr>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8">
+
+        <div class="card mb-4">
+          <div class="card-body">
+            <h4 class="mb-3 text-center">Add Address</h4>
+            <form action="/add-address" method="post">
+              <input type="hidden" name="user_id" value="<%= user._id %>">
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">House Name/No</p>
+                </div>
+                <div class="col-sm-6">
+                  <input type="text" class="mb-0 border-0" name="housename">
+                  <% if (errors && errors.housename) { %>
+                    <div class="text-danger">
+                      <%= errors.housename.msg %>
+                    </div>
+                    <% } %>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Street</p>
+                </div>
+                <div class="col-sm-6">
+                  <input type="text" class="mb-0 border-0" name="street">
+                  <% if (errors && errors.street) { %>
+                    <div class="text-danger">
+                      <%= errors.street.msg %>
+                    </div>
+                    <% } %>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">City</p>
+                </div>
+                <div class="col-sm-6">
+                  <input type="text" class="mb-0 border-0" name="city">
+                  <% if (errors && errors.city) { %>
+                    <div class="text-danger">
+                      <%= errors.city.msg %>
+                    </div>
+                    <% } %>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">State</p>
+                </div>
+                <div class="col-sm-6">
+                  <input type="text" class="mb-0 border-0" name="state">
+                  <% if (errors && errors.state) { %>
+                    <div class="text-danger">
+                      <%= errors.state.msg %>
+                    </div>
+                    <% } %>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Country</p>
+                </div>
+                <div class="col-sm-6">
+                  <input type="text" class="mb-0 border-0" name="country">
+                  <% if (errors && errors.country) { %>
+                    <div class="text-danger">
+                      <%= errors.country.msg %>
+                    </div>
+                    <% } %>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Zipcode</p>
+                </div>
+                <div class="col-sm-6">
+                  <input type="text" class="mb-0 border-0" name="zipcode">
+                  <% if (errors && errors.zipcode) { %>
+                    <div class="text-danger">
+                      <%= errors.zipcode.msg %>
+                    </div>
+                    <% } %>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Mobile Number</p>
+                </div>
+                <div class="col-sm-6">
+                  <input type="text" class="mb-0 border-0" name="mobile">
+                  <% if (errors && errors.mobile) { %>
+                    <div class="text-danger">
+                      <%= errors.mobile.msg %>
+                    </div>
+                    <% } %>
+                </div>
+              </div>
+              <hr>
+              <div class="text-center">
+                <input type="submit" value="Add Address" class="btn btn-success text-uppercase">
+              </div>
+          </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+    <%- include('../layouts/footer.ejs') %>

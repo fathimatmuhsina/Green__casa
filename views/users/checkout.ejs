@@ -1,0 +1,374 @@
+<%- include('../layouts/header.ejs') %>
+
+  <!-- Breadcrumb Section Begin -->
+  <section class="breadcrumb-section set-bg"
+    data-setbg="https://images.herzindagi.info/image/2023/Oct/ornamental-plants-at-home.jpg">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <div class="breadcrumb__text">
+            <h2>Checkout</h2>
+            <div class="breadcrumb__option">
+              <a href="/products">Products</a>
+              <span>Checkout</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Breadcrumb Section End -->
+
+  <!-- Checkout Section Begin -->
+  <section class="checkout spad">
+    <div class="container">
+      <div class="row">
+        <!-- success or error alert -->
+        <div class="col-lg-12">
+          <% if (successMessages.length> 0) { %>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+              <% successMessages.forEach(message=> { %>
+                <p>
+                  <%= message %>
+                </p>
+                <% }) %>
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+            </div>
+            <% } %>
+
+              <% if (errorMessages.length> 0) { %>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                  <% errorMessages.forEach(message=> { %>
+                    <p>
+                      <%= message %>
+                    </p>
+                    <% }) %>
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                </div>
+                <% } %>
+
+                  <!-- Check for success message in query parameters -->
+                  <% if (typeof successMessage !=='undefined' && successMessage) { %>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                      <p>
+                        <%= successMessage %>
+                      </p>
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <% } %>
+
+
+        </div>
+      </div>
+
+      <div class="checkout__form">
+        <h4>Billing Details</h4>
+        <form id="order-form" method="POST" action="/checkout">
+          <div class="row">
+            <div class="col-lg-6 col-md-6">
+              <h5>Select Delivery Address</h5>
+
+              <% if (address.length> 0) { %>
+                <% address.forEach((addr, index)=> { %>
+                  <div class="checkout__input__radio mb-3">
+                    <div class="form-check">
+                      <div class="row">
+                        <div class="col-lg-9 col-md-9">
+                          <input type="radio" class="form-check-input" id="address<%= index %>" name="deliveryAddress"
+                            value="<%= addr._id %>" <%=index===0 ? 'checked' : '' %>>
+                          <label class="form-check-label" for="address<%= index %>">
+                            <%= addr.housename %>, <%= addr.street %>, <%= addr.city %>, <%= addr.state %>, <%=
+                                      addr.zipcode %>, <%= addr.country %> - <%= addr.mobile %>
+                          </label>
+                        </div>
+                        <div class="col-lg-3 col-md-3">
+                          <!-- Edit Address Button -->
+                          <a href="/edit-deliveryaddress?id=<%= user._id %>&address_id=<%= addr._id %>"
+                            class="btn btn-sm btn-outline-secondary" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="Edit Address">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                          </a>
+
+                          <!-- Delete Address Button -->
+                          <button type="button" class="btn btn-sm btn-outline-danger delete-address"
+                            data-address-id="<%= addr._id %>" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="Delete Address">
+                            <i class="fa-solid fa-trash"></i>
+                          </button>
+                        </div>
+                      </div>
+
+                      <form id="delete-form-<%= addr._id %>" action="/delete-deliveryaddress" method="post"
+                        class="d-inline">
+                        <input type="hidden" name="user_id" value="<%= user._id %>">
+                        <input type="hidden" name="address_id" value="<%= addr._id %>">
+                      </form>
+
+                    </div>
+                  </div>
+                  <% }); %>
+                    <% } else { %>
+                      <p>No addresses found. Please add an address to proceed.</p>
+                      <% } %>
+
+                        <div class="text-center my-3">
+                          <button type="button" class="btn " style="background-color: #204f38;" data-bs-toggle="tooltip"
+                            data-bs-placement="top" title="Add new address">
+                            <a href="/add-deliveryaddress?id=<%= user._id %>" class="text-white">
+                              <i class="fa fa-plus"></i> Add Address
+                            </a>
+                          </button>
+                        </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="col-lg-6 col-md-6">
+              <div class="checkout__order">
+                <h4>Your Order</h4>
+                <div class="checkout__order__products">
+                  Products <span>Total</span>
+                </div>
+                <% if (cart && cart.items.length> 0) { %>
+                  <ul class="checkout__order__list">
+                    <% cart.items.forEach(item=> { %>
+                      <li>
+                        <%= item.product.name %> x <%= item.quantity %>
+                            <span>₹<%= ((item.product.offerPrice || item.product.discountprice) *
+                                item.quantity).toFixed(2) %></span>
+                      </li>
+                      <% }); %>
+                  </ul>
+                  <% } else { %>
+                    <p>Your cart is empty</p>
+                    <% } %>
+
+                      <h2 class="checkout__order__products">Order Summary</h2>
+                      <ul class="checkout__order__list">
+                        <li>Subtotal:<span> ₹<%= totalPrice %></span></li>
+                        <li>Delivery Charge:<span>+₹<%= deliveryCharge %></span></li>
+                        <% if (discountAmount && discountAmount> 0) { %>
+                          <li>Coupon Discount:<span> -₹<%= discountAmount.toFixed(2)%></span></li>
+                          <% } else { %>
+                            <li>Coupon Discount:<span> -₹00.00</span></li>
+                            <% } %>
+                              <% if (totalReferralDiscount && totalReferralDiscount> 0) { %>
+                                <li>Referal Discount:<span> -₹<%= totalReferralDiscount.toFixed(2)%></span></li>
+                                <% } %>
+
+                                  <li class="checkout__order__products"><strong>Total:<span> ₹<%=
+                                          finalPrice.toFixed(2)%></span></strong></li>
+                      </ul>
+
+                      <hr>
+
+                      <div class="checkout__input__radio">
+                        <input type="radio" id="wallet" name="paymentMethod" value="wallet" checked required>
+                        <label for="wallet">wallet</label>
+                      </div>
+
+                      <div class="checkout__input__radio">
+                        <input type="radio" id="razorpay" name="paymentMethod" value="razorpay" required>
+                        <label for="razorpay">RazorPay</label>
+                      </div>
+
+                      <div class="checkout__input__radio">
+                        <input type="radio" id="COD" name="paymentMethod" value="COD" required>
+                        <label for="COD">Cash on Delivery</label>
+                      </div>
+
+                      <button type="submit" id="place-order-button" class="site-btn">PLACE ORDER</button>
+              </div>
+            </div>
+
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+  <!-- Checkout Section End -->
+  <!-- HTML and other parts remain the same -->
+
+  <!-- JS Plugins -->
+  <script src="js/jquery-3.3.1.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/jquery.nice-select.min.js"></script>
+  <script src="js/jquery-ui.min.js"></script>
+  <script src="js/jquery.slicknav.js"></script>
+  <script src="js/mixitup.min.js"></script>
+  <script src="js/owl.carousel.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+  <script>
+
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelector('#order-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+    const deliveryAddress = document.querySelector('input[name="deliveryAddress"]:checked').value;
+    const userId = '{{ user._id }}';
+
+    if (paymentMethod === 'razorpay') {
+      fetch('/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          deliveryAddress: deliveryAddress,
+          paymentMethod: paymentMethod
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          const options = {
+            key: data.razorpayKey,
+            amount: data.amount,
+            currency: data.currency,
+            name: data.name,
+            description: data.description,
+            image: data.image,
+            order_id: data.orderId,
+            handler: function (response) {
+              fetch('/verifyPayment', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  razorpayPaymentId: response.razorpay_payment_id,
+                  razorpayOrderId: response.razorpay_order_id,
+                  razorpaySignature: response.razorpay_signature,
+                  userId: userId,
+                  deliveryAddress: deliveryAddress
+                })
+              })
+              .then(res => res.json())
+              .then(result => {
+                if (result.success) {
+                  Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Payment was successful and order has been placed!',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#204f38'
+                  }).then(() => {
+                    window.location.href = `/order-success?orderId=${result.orderId}`;
+                  });
+                } else {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Payment Failed',
+                    text: result.message || 'Payment verification failed!',
+                    confirmButtonText: 'Try Again',
+                    confirmButtonColor: '#204f38'
+                  }).then(() => {
+                    window.location.href = '/order-failure';
+                  });
+                }
+              })
+              .catch(error => {
+                console.error('Payment verification error:', error);
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Payment Error',
+                  text: 'There was an issue verifying your payment. Please try again later.',
+                  confirmButtonText: 'Ok',
+                  confirmButtonColor: 'red'
+                }).then(() => {
+                  window.location.href = '/order-failure';
+                });
+              });
+            },
+            prefill: {
+              name: '{{ user.name }}',
+              email: '{{ user.email }}',
+              contact: '{{ user.mobile }}'
+            },
+            notes: {
+              address: '{{ selectedAddress }}'
+            },
+            theme: {
+              color: '#204f38'
+            },
+            // Handling payment modal close event
+            modal: {
+              ondismiss: function () {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Payment Failed',
+                  text: 'The payment process was interrupted or failed.',
+                  confirmButtonText: 'Try Again',
+                  confirmButtonColor: '#204f38'
+                }).then(() => {
+                  window.location.href = '/order-failure';
+                });
+              }
+            }
+          };
+          const razorpay = new Razorpay(options);
+          razorpay.open();
+        }
+      });
+    } else {
+      this.submit();
+    }
+  });
+});
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.delete-address').forEach(button => {
+        button.addEventListener('click', (e) => {
+          e.preventDefault();
+          const addressId = button.getAttribute('data-address-id');
+          Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this address!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+
+            confirmButtonText: 'Yes, delete it!',
+            confirmButtonColor: '#204f38'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'Address removed successfully.',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#204f38'
+              }).then(() => {
+                document.getElementById(`delete-form-${addressId}`).submit();
+
+              })
+            }
+          });
+        });
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const totalPrice = <%= finalPrice %>;
+      const codRadioButton = document.querySelector('input[name="paymentMethod"][value="COD"]');
+
+      if (totalPrice > 1000) {
+        codRadioButton.disabled = true;
+        codRadioButton.parentElement.innerHTML += " (Unavailable for orders above Rs 1000)";
+      }
+    });
+  </script>
+
+  </body>
+
+  </html>

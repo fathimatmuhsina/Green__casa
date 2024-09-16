@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Ogani Template">
+  <meta name="keywords" content="Ogani, unica, creative, html">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Green Casa</title>
+  <link rel="icon" type="image/x-icon" href="https://as1.ftcdn.net/v2/jpg/02/93/50/08/1000_F_293500889_YVID9WpEpRiKhmzpfkI8ySyphoOqttmI.jpg">
+  <!--font awsom cdn-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
+  <!-- Css Styles -->
+  <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+  <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="css/elegant-icons.css" type="text/css">
+  <link rel="stylesheet" href="css/nice-select.css" type="text/css">
+  <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css">
+  <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
+  <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
+  <link rel="stylesheet" href="css/style.css" type="text/css">
+
+  <!-- sweet alert -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
+</head>
+
+<body>
+    <!-- Page Preloder -->
+    
+
+      <!-- Humberger Begin -->
+  <div class="humberger__menu__overlay"></div>
+  <div class="humberger__menu__wrapper">
+      <div class="humberger__menu__logo">
+          <a href="#"><img src="img/logo.png" alt=""></a>
+      </div>
+
+      <div class="humberger__menu__widget">
+          <div class="header__top__right__language">
+              <span class="arrow_carrot-down"></span>
+
+          </div>
+          <div class="header__top__right__auth">
+                <a class="text-dark" href="/logout"><i class="fa fa-user "></i>LogOut</a>
+              
+          </div>
+      </div>
+      <nav class="humberger__menu__nav mobile-menu">
+          <ul>
+              <li class="active"><a href="/home">Home</a></li>
+              <li class="active"><a href="/products">Products</a></li>
+            
+              <li><a href="/profile">Profile</a></li>
+             
+              <li><a href="/orders">Orders</a></li>
+           
+              
+          </ul>
+      </nav>
+      <div id="mobile-menu-wrap"></div>
+      <div class="header__top__right__social">
+          <a href="#"><i class="fa fa-facebook"></i></a>
+          <a href="#"><i class="fa fa-twitter"></i></a>
+          <a href="#"><i class="fa fa-linkedin"></i></a>
+          <a href="#"><i class="fa fa-pinterest-p"></i></a>
+      </div>
+      <div class="humberger__menu__contact">
+        <ul>
+           
+        </ul>
+    </div>
+  </div>
+  <!-- Humberger End -->
+  <header class="header">
+    <div class="header__top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-6">
+                    <div class="header__top__left">
+                        <ul>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <div class="header__top__right">
+                        <div class="header__top__right__social">
+                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            <a href="#"><i class="fa fa-twitter"></i></a>
+                            <a href="#"><i class="fa fa-linkedin"></i></a>
+                            <a href="#"><i class="fa fa-pinterest-p"></i></a>
+                        </div>
+
+                        <div class="header__top__right__auth">
+                            <%if(user){%>
+                                <a class="text-white" href="/logout"><i class="fa fa-user "></i>LogOut</a>
+
+                            <%}else{%>
+                                <a class="text-white" href="/logout"><i class="fa fa-user "></i>LogIn</a>
+  
+                           <% }%>
+                          
+                            
+                                                 </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="header__logo">
+                    <a href="#"  style="font-size: xx-large; color: green;"><i class="fa-solid fa-seedling" style="color: green;"></i><b>Green Casa</b></a>
+                     
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <nav class="header__menu">
+                    <ul>
+                        <li class="active"><a href="/home">Home</a></li>
+                        <li><a href="/products">Products</a></li>
+                    <%if(user){%>
+                        <li><a href="/profile">Profile</a></li>
+                           
+                        <li><a href="/orders">Orders</a></li>
+                   <% }%>
+                           
+            
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-lg-3">
+                <div class="header__cart">
+                    <ul> <li>
+                        <a href="/wishlist">
+                            <i class="fa fa-heart"></i>
+                            <span id="wishlist-count"><%= wishlistCount %></span>
+                        </a>
+                    </li>
+                    
+                    <% if (user) { %>
+                        <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span id="cart-count">
+                                    <%= cartCount %>
+                                </span></a></li>
+                        <li><a href="/wallet"><i class="fa fa-wallet"></i></a></li>
+
+                        <% } else { %>
+                            <li><a href="#"><i class="fa fa-shopping-bag"></i></a></li>
+                            <% } %>
+                    </ul>
+                  
+                </div>
+            </div>
+        </div>
+        <div class="humberger__open">
+            <i class="fa fa-bars"></i>
+        </div>
+    </div>
+</header>

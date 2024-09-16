@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Ogani Template">
+  <meta name="keywords" content="Ogani, unica, creative, html">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Green Casa</title>
+  <link rel="icon" type="image/x-icon" href="https://as1.ftcdn.net/v2/jpg/02/93/50/08/1000_F_293500889_YVID9WpEpRiKhmzpfkI8ySyphoOqttmI.jpg">
+  <!--font awsom cdn-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Bootstrap JS (necessary for modal functionality) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Css Styles -->
+
+  <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+  <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="css/elegant-icons.css" type="text/css">
+  <link rel="stylesheet" href="css/nice-select.css" type="text/css">
+  <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css">
+  <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
+  <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
+  <link rel="stylesheet" href="css/style.css" type="text/css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <!-- sweet alert -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+</head>
+
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+      <!-- Humberger Begin -->
+  <div class="humberger__menu__overlay"></div>
+  <div class="humberger__menu__wrapper">
+      <div class="humberger__menu__logo">
+          <a href="#"><img src="img/logo.png" alt=""></a>
+      </div>
+
+      <div class="humberger__menu__widget">
+          <div class="header__top__right__language">
+              <span class="arrow_carrot-down"></span>
+
+          </div>
+          <div class="header__top__right__auth">
+            <% if (user) { %>
+                <a class="text-dark" href="/logout"><i class="fa fa-user "></i>LogOut</a>
+            <% } else { %>
+                <a class="text-dark" href="/login"><i class="fa fa-user "></i>LogIn</a>
+            <% } %>        
+          </div>
+      </div>
+      <nav class="humberger__menu__nav mobile-menu">
+          <ul>
+              <li class="active"><a href="/home">Home</a></li>
+              <li class="active"><a href="/products">Products</a></li>
+              <% if (user) { %>
+              <li><a href="/profile">Profile</a></li>
+             
+              <li><a href="/orders">Orders</a></li>
+              <%}%>
+              
+              <li><a href="/about">About Us</a></li>
+          </ul>
+      </nav>
+      <div id="mobile-menu-wrap"></div>
+      <div class="header__top__right__social">
+          <a href="#"><i class="fa fa-facebook"></i></a>
+          <a href="#"><i class="fa fa-twitter"></i></a>
+          <a href="#"><i class="fa fa-linkedin"></i></a>
+          <a href="#"><i class="fa fa-pinterest-p"></i></a>
+      </div>
+      <div class="humberger__menu__contact">
+        <ul>
+            <% if (user) { %>
+                <li><b>Welcome, <%= user.name %></b></li>
+            <% } %>
+        </ul>
+    </div>
+  </div>
+  <!-- Humberger End -->
+  <header class="header">
+    <div class="header__top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-6">
+                    <div class="header__top__left">
+                        <ul>
+                            <% if (user) { %>
+                                <li class="text-white"><b>Welcome, <%= user.name %></b></li>
+                            <% } else { %>
+                                <li class="text-white"><b>Welcome, Guest</b></li>
+                            <% } %>
+                            
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <div class="header__top__right">
+                        <div class="header__top__right__social">
+                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            <a href="#"><i class="fa fa-twitter"></i></a>
+                            <a href="#"><i class="fa fa-linkedin"></i></a>
+                            <a href="#"><i class="fa fa-pinterest-p"></i></a>
+                        </div>
+
+                        <div class="header__top__right__auth">
+                            <% if (user) { %>
+                                <a class="text-white" href="/logout"><i class="fa fa-user "></i>LogOut</a>
+                            <% } else { %>
+                                <a class="text-white" href="/login"><i class="fa fa-user "></i>LogIn</a>
+                            <% } %>                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="header__logo">
+                    <a href="#"  style="font-size: xx-large; color: green;">
+                        <i class="fa-solid fa-seedling" style="color: green;"></i><b>Green Casa</b></a>
+                     
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <nav class="header__menu">
+                    <ul>
+                        <li><a href="/home">Home</a></li>
+                        <li><a href="/products">Products</a></li>
+                        <% if (user) { %>
+                            <li><a href="/profile">Profile</a></li>
+                            <li><a href="/orders">Orders</a></li>
+                        <% } %>
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-lg-3">
+                <div class="header__cart">
+                    <ul>
+                        <li><a href="/wishlist"><i class="fa fa-heart"></i>  <span id="wishlist-count">
+                            <%=wishlistCount %>
+                        </span></a></li>
+                        <% if (user) { %>
+                            <li><a href="/cart"><i class="fa fa-shopping-bag"></i> <span id="cart-count"><%= cartCount %></span></a></li>
+                            <li><a href="/wallet"><i class="fa fa-wallet"></i></a></li>
+            
+                        <% } else { %>
+                            <li><a href="#"><i class="fa fa-shopping-bag"></i> <span id=""></span></a></li>
+                        <% } %>
+                    </ul>
+                    <% if (user) { %>
+                        <div class="header__cart__price">item: <span><%= items.length > 0 ? totalPrice : "0.00" %></span></div>
+                    <% } %>
+                </div>
+            </div>
+            </div>
+            <div class="humberger__open">
+                <i class="fa fa-bars"></i>
+            </div>
+            </div>
+            </header>
+            
+            <section class="hero hero-normal">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="hero__categories">
+                                <div class="hero__categories__all">
+                                    <i class="fa fa-bars"></i>
+                                    <span>All departments</span>
+                                </div>
+                                <ul>
+                                    <% categories.forEach(category=> { %>
+                                        <li><a>
+                                                <%= category.name %>
+                                            </a></li>
+                                        <% }); %>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-9">
+                            
+                                        <div class="hero__search">
+                                          <div class="hero__search__form border border-success ">
+                                            <form action="/search" method="GET" class="bg-white">
+                                              <input type="text" name="query" placeholder="What do you need?" required>
+                                              <button type="submit" class="site-btn">SEARCH</button>
+                                            </form>
+                                          </div>
+                                
+                                <div class="hero__search__phone">
+                                    <div class="hero__search__phone__icon">
+                                        <i class="fa fa-phone"></i>
+                                    </div>
+                                    <div class="hero__search__phone__text">
+                                        <h5>+65 11.188.888</h5>
+                                        <span>support 24/7 time</span>
+                                    </div>
+                                </div>
+                            </div>
+                
+                      
+                
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+  <!-- Hero Section End -->
+
+  <!-- Breadcrumb Section Begin -->
+  <section class="breadcrumb-section set-bg"
+    data-setbg="https://nurserykart.in/wp-content/uploads/2024/03/top-view-of-green-succulent-plants-scaled.jpg">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <div class="breadcrumb__text">
+            <h2>Products</h2>
+            <div class="breadcrumb__option">
+              <a href="/home">Home</a>
+              <span>Products</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Breadcrumb Section End -->
+
+  <!-- Product Section Begin -->
+  <section class="product spad">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3 col-md-5">
+          <div class="sidebar">
+            <div class="sidebar__item">
+              <h4>Price</h4>
+              <form id="filter-form" method="get" action="/products">
+                <div class="filter__price">
+                  <h5>Price Range</h5>
+                  <div class="price-filter">
+                    <label>
+                      <input type="checkbox" name="priceRange" value="0-500" <% if
+                        (selectedPriceRanges.includes("0-500")) { %>checked<% } %> > 0-500
+                    </label>
+                    <label>
+                      <input type="checkbox" name="priceRange" value="500-1000" <% if
+                        (selectedPriceRanges.includes("500-1000")) { %>checked<% } %> > 500-1000
+                    </label>
+                    <label>
+                      <input type="checkbox" name="priceRange" value="1000-2000" <% if
+                        (selectedPriceRanges.includes("1000-2000")) { %>checked<% } %> > 1000-2000
+                    </label>
+                    <label>
+                      <input type="checkbox" name="priceRange" value="2000-above" <% if
+                        (selectedPriceRanges.includes("2000-above")) { %>checked<% } %> > 2000 above
+                    </label>
+                  </div>
+                </div>
+                <!-- Category Filter -->
+                <div class="sidebar__item">
+                  <h4>Categories</h4>
+                  <div class="category-filter">
+                    <% categories.forEach(category=> { %>
+                      <label>
+                        <input type="checkbox" name="categories" value="<%= category.name %>" <% if
+                          (selectedCategories.includes(category.name)) { %>checked<% } %> >
+                          <%= category.name %>
+                      </label>
+                      <% }); %>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn text-white" style="background-color: #204f38;">Apply</button>
+              </form>
+
+
+
+            </div>
+
+
+          </div>
+        </div>
+        <div class="col-lg-9 col-md-7">
+
+          <div class="filter__item">
+            <div class="row">
+              <div class="col-lg-4 col-md-5">
+
+                <form id="sort-form" name="sort-form" action="/products" method="get">
+                  <div class="filter__sort">
+                    <span>Sort By</span>
+                    <select name="sort" id="sort" onchange="document.getElementById('sort-form').submit();">
+                      <option value="default" <%=sortOption==='default' ? 'selected' : '' %>>Default</option>
+                      <option value="popularity" <%=sortOption==='popularity' ? 'selected' : '' %>>Popularity</option>
+                      <option value="price-asc" <%=sortOption==='price-asc' ? 'selected' : '' %>>Price: low to high
+                      </option>
+                      <option value="price-desc" <%=sortOption==='price-desc' ? 'selected' : '' %>>Price: high to low
+                      </option>
+                      <option value="new-arrivals" <%=sortOption==='new-arrivals' ? 'selected' : '' %>>New arrivals
+                      </option>
+                      <option value="a-z" <%=sortOption==='a-z' ? 'selected' : '' %>>aA - zZ</option>
+                      <option value="z-a" <%=sortOption==='z-a' ? 'selected' : '' %>>zZ - aA</option>
+                    </select>
+                  </div>
+                </form>
+
+              </div>
+              <div class="col-lg-4 col-md-4">
+                <div class="filter__found">
+                  <h6><span>
+                      <%= totalProducts %>
+                    </span> Products found</h6>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-3">
+
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <% if (products.length> 0) { %>
+              <% products.forEach(product=> { %>
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                  <div class="product__item">
+                    <div class="product__item__pic set-bg" data-setbg="/images/<%= product.image[0] %>">
+                      <ul class="product__item__pic__hover">
+                        <li><a href="#" class="add-to-wishlist" data-id="<%= product._id %>"><i
+                              class="fa fa-heart"></i></a></li>
+                        <li><a href="/product-detail?id=<%= product._id %>"><i class="fa fa-retweet"></i></a></li>
+                        <li><a href="#" class="add-to-cart" data-id="<%= product._id %>"><i
+                              class="fa fa-shopping-cart"></i></a></li>
+                      </ul>
+                    </div>
+                    <div class="product__item__text">
+                      <h6><a href="#">
+                          <%= product.name %>
+                        </a></h6>
+                      <% if (product.offerPrice) { %>
+                        <div class="price-container">
+                          <h5 class="product__offer-price">₹<%= product.offerPrice.toFixed(2) %>
+                          </h5>
+                          <del class="product__original-price text-muted">₹<%= product.discountprice.toFixed(2) %></del>
+                          <p class="text-danger">
+                            <%= product.offerPercentage %>% OFF
+                          </p>
+                        </div>
+                        <% } else { %>
+                          <h5 class="product__original-price">₹<%= product.discountprice.toFixed(2) %>
+                          </h5>
+                          <% } %>
+
+                            <% if(product.stock <=20 && product.stock !=0){ %>
+                              <h6 class="text-success">Only few left</h6>
+                              <% } else if(product.stock> 20) { %>
+                                <h6 class="text-success">In stock</h6>
+                                <% } else { %>
+                                  <h6 class="text-danger">Out of stock</h6>
+                                  <% } %>
+                    </div>
+
+                  </div>
+                </div>
+                <% }); %>
+                  <% } else { %>
+                    <p>Products Not found</p>
+                    <% } %>
+          </div>
+
+
+
+          <div class="product__pagination">
+            <% if (currentPage> 1) { %>
+              <a href="?page=<%= currentPage - 1 %>&sort=<%= sortOption %>"><i class="fa fa-long-arrow-left"></i></a>
+              <% } %>
+
+                <% for (let i=1; i <=totalPages; i++) { %>
+                  <a href="?page=<%= i %>&sort=<%= sortOption %>" <%=i===currentPage ? 'class="active"' : '' %>><%= i %>
+                  </a>
+                  <% } %>
+
+                    <% if (currentPage < totalPages) { %>
+                      <a href="?page=<%= currentPage + 1 %>&sort=<%= sortOption %>"><i
+                          class="fa fa-long-arrow-right"></i></a>
+                      <% } %>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <%- include('../layouts/userfooter.ejs') %>
+
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.nice-select.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery.slicknav.js"></script>
+    <script src="js/mixitup.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/main.js"></script>
+
+
+    </body>
+
+    </html>

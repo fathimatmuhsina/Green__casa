@@ -1,0 +1,125 @@
+<%- include('../layouts/detailheader.ejs') %>
+
+
+  <div class="row">
+    <div class="col">
+      <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
+        <ol class="breadcrumb mb-0">
+          <li class="breadcrumb-item"><a href="/home">Home</a></li>
+          <li class="breadcrumb-item"><a href="/profile">Profile</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Edit Profile</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card mb-4">
+          <div class="card-body text-center">
+            <% if(user.image) { %>
+              <img src="images/<%= user.image %>" alt="avatar" class="rounded-circle img-fluid" id="profileImage"
+                style="width: 150px;">
+              <% } else { %>
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+                  class="rounded-circle img-fluid" id="profileImage" style="width: 150px;">
+                <% } %>
+                  <form id="profileForm" action="/edit-profile" method="post" enctype="multipart/form-data">
+                    <input type="file" name="image" class="mt-1" onchange="previewImage(event)"><br>
+                    <input type="hidden" name="user_id" value="<%= user._id %>">
+                    <div class="d-flex justify-content-center mb-2"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Name</p>
+              </div>
+              <div class="col-sm-6">
+                <input type="text" class="mb-0 border-0" name="name" value="<%= user.name %>">
+                <% if (errors && errors.name) { %>
+                  <div class="text-danger">
+                    <%= errors.name.msg %>
+                  </div>
+                  <% } %>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Email</p>
+              </div>
+              <div class="col-sm-6">
+                <input type="email" class="mb-0 border-0" name="email" value="<%= user.email %>" readonly>
+                <% if (errors && errors.email) { %>
+                  <div class="text-danger">
+                    <%= errors.email.msg %>
+                  </div>
+                  <% } %>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Mobile</p>
+              </div>
+              <div class="col-sm-6">
+                <input type="text" class="mb-0 border-0" name="mobile" value="<%= user.mobile %>">
+                <% if (errors && errors.mobile) { %>
+                  <div class="text-danger">
+                    <%= errors.mobile.msg %>
+                  </div>
+                  <% } %>
+              </div>
+            </div>
+            <hr>
+            <button type="button" class=" btn border-0 update-profile text-white " style="background-color: #204f38;">
+              Update Profile
+            </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <script>
+    function previewImage(event) {
+      const reader = new FileReader();
+      reader.onload = function () {
+        const output = document.getElementById('profileImage');
+        output.src = reader.result;
+      }
+      reader.readAsDataURL(event.target.files[0]);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelector('.update-profile').addEventListener('click', (e) => {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "Do you want to update your profile?",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#204f38',
+
+          confirmButtonText: 'Yes, update it!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            document.getElementById('profileForm').submit();
+
+
+          }
+        });
+      });
+    });
+  </script>
+  <%- include('../layouts/footer.ejs') %>
+</body>
+
+</html>

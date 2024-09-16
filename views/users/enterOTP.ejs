@@ -1,0 +1,118 @@
+<%- include('../layouts/commonHeader.ejs') %>
+
+
+<section class="vh-100"
+  style="background-image: url('images/greencasabg.avif'); background-position: center; background-repeat: no-repeat; background-size: cover;">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-md-6">
+        <div class="card border border-success" style="border-radius: 1rem, bold;">
+          <div class="row g-0">
+            <div class="col-md-12 col-lg-12 d-flex align-items-center">
+              <div class="card-body p-4 p-lg-5 text-black">
+                <% if (typeof message !=='undefined' ) { %>
+                  <p style="color: red;">
+                    <%= message %>
+                  </p>
+                  <% } %>
+                    <form id="otpForm" method="post">
+                      <h5 class="fw-normal mb-2 pb-2" style="letter-spacing: 1px;">Enter OTP</h5>
+                      <div id="alertMessage"></div>
+                      <div class="form-outline mb-2 pb-2">
+                        <input type="password" name="password" class="form-control form-control-md"
+                          placeholder="Enter OTP" />
+                        <input type="hidden" name="email" value="<%= email %>">
+                        <div class="pt-1 mt-3 mb-2 pb-2">
+                          <button id="verifyBtn" class="btn btn-md btn-block text-white"
+                            style="background-color: #204f38;" type="button">Verify OTP</button>
+                        </div>
+                        <p id="timer" class="text-secondary"><i class="fa-solid fa-clock" style="color: #204f38;"></i>
+                          <span id="time">60</span> seconds
+                        </p>
+                    </form>
+                    <form id="resendOtpForm" method="post">
+                      <input type="hidden" name="email" value="<%= email %>">
+                      <button id="resendBtn" type="button" class="btn btn-success">Resend OTP</button>
+                    </form>
+
+                    <script>
+                      $(document).ready(function () {
+                        var timer;
+                        var timeLeft = 60;
+                        var timerElement = $('#time');
+
+                        function startTimer() {
+                          clearInterval(timer);
+                          timeLeft = 60;
+                          timerElement.text(timeLeft);
+
+                          timer = setInterval(function () {
+                            timeLeft--;
+                            timerElement.text(timeLeft);
+                            if (timeLeft <= 0) {
+                              clearInterval(timer);
+                              $('#resendBtn').prop('disabled', false);
+                            }
+                          }, 1000);
+                        }
+
+                        // Start the timer on page load
+                        startTimer();
+
+                        // Disable the Resend OTP button initially
+                        $('#resendBtn').prop('disabled', true);
+
+                        // Enable the Resend OTP button after one minute
+                        setTimeout(function () {
+                          $('#resendBtn').prop('disabled', false);
+                        }, 60000);
+
+                        // Restart the timer and handle the resend OTP button click
+                        $('#resendBtn').on('click', function () {
+                          startTimer();
+                          $('#resendBtn').prop('disabled', true);
+                          var email = $("input[name='email']").val();
+                          $.ajax({
+                            type: "POST",
+                            url: "/resendotp",
+                            data: { email: email },
+                            success: function (response) {
+                              $('#alertMessage').html("<div class='alert alert-success' role='alert'>" + response.message + "</div>");
+                            },
+                            error: function () {
+                              $('#alertMessage').html("<div class='alert alert-danger' role='alert'>An error occurred while resending OTP.</div>");
+                            }
+                          });
+                        });
+
+                        // Handle the verify OTP button click
+                        $('#verifyBtn').on('click', function () {
+                          var formData = $('#otpForm').serialize();
+                          $.ajax({
+                            type: "POST",
+                            url: "/verifyotp",
+                            data: formData,
+                            success: function (response) {
+                              if (response.success) {
+                                window.location.href = response.redirect;
+                              } else {
+                                $('#alertMessage').html("<div class='alert alert-danger' role='alert'>" + response.message + "</div>");
+                              }
+                            },
+                            error: function () {
+                              $('#alertMessage').html("<div class='alert alert-danger' role='alert'>An error occurred while verifying OTP.</div>");
+                            }
+                          });
+                        });
+                      });
+                    </script>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('../layouts/footer.ejs') %>

@@ -1,0 +1,495 @@
+<%- include('../layouts/adminheader.ejs') %>
+
+  <section class="vh-100">
+    <div class="row">
+      <div class="col">
+        <nav aria-label="breadcrumb" class=" rounded-3 p-3 mb-4 bg-white">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="/admin/home">Home</a></li>
+            <li class="breadcrumb-item"><a href="/admin/view-orders">Ordes</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Order Detail Page</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+    <div class="container bg-white py-4">
+      <div style="background-color: #204f38;">
+        <h2 class="text-white text-center">Order Details</h2>
+      </div>
+      <hr>
+      <!-- Success and Error Messages -->
+      <% if (successMessages.length> 0) { %>
+        <div class="alert alert-success alert-dismissible fade show shadow-sm p-3 mb-4 rounded position-relative"
+          role="alert" style="font-size: 16px;">
+          <button type="button" class="btn-close custom-close" data-bs-dismiss="alert" aria-label="Close"
+            style="position: absolute; top: 5px; right: 5px; font-size: 20px; background-color: transparent; border: none;">&times;</button>
+          <strong>Success!</strong>
+          <%= successMessages[0] %>
+        </div>
+        <% } %>
+
+          <% if (errorMessages.length> 0) { %>
+            <div class="alert alert-danger alert-dismissible fade show shadow-sm p-3 mb-4 rounded position-relative"
+              role="alert" style="font-size: 16px;">
+              <button type="button" class="btn-close custom-close" data-bs-dismiss="alert" aria-label="Close"
+                style="position: absolute; top: 5px; right: 5px; font-size: 20px; background-color: transparent; border: none;">&times;</button>
+              <strong>Error:</strong>
+              <%= errorMessages[0] %>
+            </div>
+            <% } %>
+
+
+
+              <!-- Order and User Details Section -->
+              <div class="row mb-4">
+                <div class="col-md-6">
+                  <h4>User Details</h4>
+                  <p><strong>Name:</strong>
+                    <%= order.user.name %>
+                  </p>
+                  <p><strong>Email:</strong>
+                    <%= order.user.email %>
+                  </p>
+                  <p><strong>Address:</strong>
+                    <%= order.deliveryAddress.housename %>,
+                      <%= order.deliveryAddress.street %>, <%= order.deliveryAddress.city %>,
+                          <%= order.deliveryAddress.state %>, <%= order.deliveryAddress.zipcode %>,
+                              <%= order.deliveryAddress.country %>
+                  </p>
+                  <p><strong>Mobile:</strong>
+                    <%= order.deliveryAddress.mobile %>
+                  </p>
+                </div>
+
+                <div class="col-md-6">
+                  <h4>Order Info</h4>
+                  <p><strong>Order ID:</strong>
+                    <%= order._id %>
+                  </p>
+                  <p><strong>Date:</strong>
+                    <%= new Date(order.createdAt).toDateString() %>
+                  </p>
+                  <p><strong>Payment Method:</strong>
+                    <%= order.paymentMethod %>
+                  </p>
+                  <p><strong>Status:</strong>
+                    <%= order.status %>
+                  </p>
+
+                  <!-- Change Order Status Form -->
+                  <% if (order.status !=='Delivered' && order.status !=='Cancelled' && order.status !=='Pending' &&
+                    !order.returnStatus) { %>
+                    <div class="row ">
+                      <div class="col-md-5">
+                        <form id="statusForm" action="/admin/update-order-status" method="POST" class="mb-3">
+                          <div class="form-group">
+                            <label for="status">Change Status</label>
+                            <select name="status" id="status" class="form-control mt-2 ">
+                              <option value="Processing" <%=order.status==='Processing' ? 'selected' : '' %>>Processing
+                              </option>
+                              <option value="Shipped" <%=order.status==='Shipped' ? 'selected' : '' %>>Shipped</option>
+                              <option value="Delivered" <%=order.status==='Delivered' ? 'selected' : '' %>>Delivered
+                              </option>
+                            </select>
+                          </div>
+                      </div>
+                      <div class="col-md-6">
+                        <input type="hidden" name="orderId" value="<%= order._id %>">
+                        <button type="submit" class="btn text-white" style="background-color: #204f38;">Update
+                          Status</button>
+
+                      </div>
+                    </div>
+
+                    <button type="button" class="btn  mt-2" id="cancelOrderBtn"
+                      style="background-color:blanchedalmond; border-color: #204f38;">Cancel Order</button>
+                    </form>
+
+                    <% } %>
+                </div>
+              </div>
+
+
+              <!-- Return Section -->
+              <% if (order.returnStatus) { %>
+                <h4>Return Details</h4>
+                <div class="row mb-2">
+                  <div class="col-sm-3">
+                    <p class="mb-0">Return Status:</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-dark mb-0">
+                      <%= order.returnStatus %>
+                    </p>
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <div class="col-sm-3">
+                    <p class="mb-0">Return Reason:</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-dark mb-0">
+                      <%= order.returnReason %>
+                    </p>
+                  </div>
+                </div>
+
+                <% if (order.returnStatus==='Rejected' ) { %>
+                  <div class="row mb-2">
+                    <div class="col-sm-3">
+                      <p class="mb-0">Rejection Reason:</p>
+                    </div>
+                    <div class="col-sm-9">
+                      <p class="text-dark mb-0">
+                        <%= order.returnReason %>
+                      </p>
+                    </div>
+                    <div class="col-sm-9">
+                      <p class="text-dark mb-0">
+                        <%= order.returnDescription %>
+                      </p>
+                    </div>
+                  </div>
+                  <% } %>
+
+                    <% if (order.returnStatus==='Requested' ) { %>
+                      <div class="row">
+
+                        <div class="col-md-6">
+                          <form action="/admin/update-return-status" method="post" class="mb-3">
+                            <input type="hidden" name="orderId" value="<%= order._id %>">
+                            <div class="row">
+
+                              <div class="col-md-8">
+                                <div class="form-group">
+                                  <label for="returnStatus">Return Status</label>
+                                  <select class="form-control" id="returnStatus" name="returnStatus" required>
+                                    <option value="">Select status</option>
+                                    <option value="Accepted">Accept Return</option>
+                                    <option value="Rejected">Reject Return</option>
+                                  </select>
+                                  <div class="form-group" id="rejectionReasonContainer" style="display: none;">
+                                    <label for="rejectionReason">Rejection Reason</label>
+                                    <textarea class="form-control" id="rejectionReason" name="rejectionReason"
+                                      rows="3"></textarea>
+                                  </div>
+                                </div>
+                              </div>
+
+
+
+                              <div class="col-md-4">
+                                <div class="d-flex justify-content-center">
+                                  <button class="btn text-white" style="background-color: #204f38;" type="submit">Update
+                                    Return</button>
+                                </div>
+                              </div>
+
+                            </div>
+                          </form>
+                        </div>
+
+                        <div class="col-md-6"></div>
+                      </div>
+                      <% } %>
+
+
+                        <div class="row">
+                          <div class="col-md-6">
+                            <% if (order.returnStatus==='Accepted' && order.status !=='Refund' ) { %>
+                              <form action="/admin/update-return-progress" method="post" class="mb-3">
+                                <input type="hidden" name="orderId" value="<%= order._id %>">
+                                <div class="row">
+                                  <div class="col-md-8">
+                                    <div class="form-group mt-1">
+                                      <label for="returnProgress">Update Return Progress</label>
+                                      <select class="form-control" id="returnProgress" name="returnProgress" required>
+                                        <option value="">Select status</option>
+                                        <option value="Pickup">Pickup</option>
+                                        <option value="Returned">Returned</option>
+                                        <option value="Refund">Refund</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                    <button class="btn text-white" style="background-color: #204f38;"
+                                      type="submit">Update Progress</button>
+                                  </div>
+                                </div>
+                              </form>
+                              <% } %>
+                          </div>
+                          <div class="col-md-6"></div>
+                        </div>
+
+
+                        <% } %>
+
+                          <!-- Cancellation Reason Section -->
+                          <% if (order.status==='Cancelled' && order.cancellationReason) { %>
+                            <p><strong>Cancellation Reason:</strong>
+                              <%= order.cancellationReason %>
+                            </p>
+                            <% if (order.cancellationDescription) { %>
+                              <p><strong>Description:</strong>
+                                <%= order.cancellationDescription %>
+                              </p>
+                              <% } %>
+                                <% } %>
+
+                                  <!-- Products Table -->
+                                  <hr>
+                                  <h4>Products</h4>
+                                  <table class="table table-striped">
+                                    <thead>
+                                      <tr>
+                                        <th scope="col">Product</th>
+                                        <th scope="col">Image</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Total</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <% order.items.forEach(item=> { %>
+                                        <tr>
+                                          <td>
+                                            <%= item.product.name %>
+                                          </td>
+                                          <td>
+                                            <% if (item.product.image && item.product.image.length> 0) { %>
+                                              <img src="/images/<%= item.product.image[0] %>" alt="Product Image"
+                                                class="img-thumbnail" style="width: 100px; height: 100px;">
+                                              <% } %>
+                                          </td>
+                                          <td>
+                                            <%= item.quantity %>
+                                          </td>
+                                          <td>₹<%= (item.product.offerPrice||item.product.discountprice).toFixed(2) %>
+                                          </td>
+                                          <td>₹<%= ((item.product.offerPrice||item.product.discountprice) *
+                                              item.quantity).toFixed(2) %>
+                                          </td>
+                                        </tr>
+                                        <% }) %>
+                                    </tbody>
+                                  </table>
+
+                                  <hr>
+                                  <div class="row">
+                                    <div class="col-md-8"></div>
+                                    <div class="col-md-4">
+                                      <div class="row">
+                                        <div class="col-md-9">Coupon Discount:</div>
+                                        <div class="col-md-3">₹<%= order.discountAmount.toFixed(2) %>
+                                        </div>
+
+                                        <div class="col-md-9">Delivery Charge:</div>
+                                        <div class="col-md-3">₹<%= order.deliveryCharge %>
+                                        </div>
+
+                                        <div class="col-md-9">Total Amount: </div>
+                                        <div class="col-md-3"><strong>₹<%= order.totalAmount.toFixed(2) %>
+                                              </strong< /div>
+
+
+
+
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <!-- Order Tracking Section -->
+                                  <h4 class="my-4">Order Tracking</h4>
+                                  <hr>
+                                  <div class="container">
+                                    <% if (order.tracking && order.tracking.length> 0) { %>
+                                      <% order.tracking.forEach(track=> { %>
+                                        <div class="row ">
+                                          <div class="col-sm-6">
+                                            <p class="text-dark mb-0">
+                                              <%= track.status %>
+                                            </p>
+                                          </div>
+                                          <div class="col-sm-6">
+                                            <%= new Date(track.date).toLocaleDateString('en-US', { weekday: 'long' ,
+                                              year: 'numeric' , month: 'short' , day: 'numeric' }) %>
+                                              - <%= new Date(track.date).toLocaleTimeString('en-US') %>
+                                          </div>
+                                        </div>
+                                        <hr>
+                                        <% }) %>
+                                          <% } else { %>
+                                            <p>No tracking information available</p>
+                                            <% } %>
+                                  </div>
+    </div>
+
+  </section>
+  <!-- Cancellation Reason Modal -->
+  <div class="modal fade" id="cancellationModal" tabindex="-1" aria-labelledby="cancellationModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <form id="cancellationForm" action="/admin/cancel-order" method="POST">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="cancellationModalLabel">Cancel Order</h5>
+            <a class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+              style="cursor: pointer; color: rgb(16, 16, 16); width: 30px; height: 30px; font-size: 16px;">X</a>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" name="orderId" value="<%= order._id %>">
+            <div class="mb-3">
+              <label for="cancellationReason" class="form-label">Reason for Cancellation</label><br>
+              <select class="form-select" id="cancellationReason" name="cancellationReason">
+                <option value="">Select reason</option>
+                <option value="Out of Stock">Out of Stock</option>
+                <option value="Customer Request">Customer Request</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="mb-3" id="cancellationDescriptionContainer">
+              <br><br><label for="cancellationDescription" class="form-label">Description</label><br>
+              <textarea class="form-control" id="cancellationDescription" name="cancellationDescription"
+                rows="3"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn text-white" style="background-color: #204f38;">Cancel Order</button>
+            <button type="button" class="btn" style="background-color: blanchedalmond; border-color: #204f38;"
+              data-bs-dismiss="modal">Close</button>
+
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const cancelOrderBtn = document.getElementById('cancelOrderBtn');
+      const cancellationModal = new bootstrap.Modal(document.getElementById('cancellationModal'));
+      const cancellationForm = document.getElementById('cancellationForm');
+      const cancellationReason = document.getElementById('cancellationReason');
+      const cancellationDescription = document.getElementById('cancellationDescription');
+      const cancellationDescriptionContainer = document.getElementById('cancellationDescriptionContainer');
+
+      // Show modal when cancel button clicked
+      cancelOrderBtn.addEventListener('click', function () {
+        cancellationModal.show();
+      });
+
+      // Toggle description textarea based on the selected reason
+      cancellationReason.addEventListener('change', function () {
+        if (cancellationReason.value === 'Other') {
+          cancellationDescriptionContainer.style.display = 'block';
+          cancellationDescription.setAttribute('required', 'required');
+        } else {
+          cancellationDescriptionContainer.style.display = 'none';
+          cancellationDescription.removeAttribute('required');
+        }
+      });
+
+      // Form submission handler with validation
+      cancellationForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        // Check if cancellation reason is selected
+        if (cancellationReason.value === '') {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Please select a reason for cancellation',
+            confirmButtonColor: 'red',
+          });
+          return;  // Stop submission if reason is not selected
+        }
+
+        // Check if cancellation reason is 'Other' and description is missing
+        if (cancellationReason.value === 'Other' && cancellationDescription.value.trim() === '') {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Please provide a description for the cancellation reason',
+            confirmButtonColor: 'red',
+          });
+          return;  // Stop submission if description is missing
+        }
+
+        // Show confirmation alert before submitting
+        Swal.fire({
+          title: 'Are you sure?',
+          text: 'Do you really want to cancel this order?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, cancel it!',
+          confirmButtonColor: '#204f38',
+          cancelButtonText: '<span style="color:black;">No, keep it</span>',
+          cancelButtonColor: 'blanchedalmond',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Submit the form if confirmed
+            Swal.fire({
+              icon: 'success',
+              title: 'Order Canceled',
+              text: 'The order has been successfully canceled.',
+              confirmButtonColor: '#204f38',
+              confirmButtonText: 'OK'
+            }).then(() => {
+              cancellationForm.submit(); // Only submit the form here
+            });
+          }
+        });
+      });
+
+
+
+
+      // Handle return status (if present)
+      if (returnStatusSelect) {
+        returnStatusSelect.addEventListener('change', function () {
+          if (returnStatusSelect.value === 'Rejected') {
+            rejectionReasonContainer.style.display = 'block';
+            document.getElementById('rejectionReason').setAttribute('required', 'required');
+          } else {
+            rejectionReasonContainer.style.display = 'none';
+            document.getElementById('rejectionReason').removeAttribute('required');
+          }
+        });
+      }
+    });
+
+
+  </script>
+  <!-- Include SweetAlert CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script>
+    // Assuming 'messages' contains either success or error flash messages
+    const successMessage = '<%= messages.success ? messages.success[0] : null %>';
+    const errorMessage = '<%= messages.error ? messages.error[0] : null %>';
+
+    // If there's a success message, trigger a SweetAlert success popup
+    if (successMessage) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: successMessage,
+        showConfirmButton: false,
+        timer: 3000 // Closes after 3 seconds
+      });
+    }
+
+    // If there's an error message, trigger a SweetAlert error popup
+    if (errorMessage) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: errorMessage,
+        showConfirmButton: false,
+        timer: 3000
+      });
+    }
+  </script>
+
+  <%- include('../layouts/footer.ejs') %>

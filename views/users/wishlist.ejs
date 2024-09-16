@@ -1,0 +1,211 @@
+<%- include('../layouts/header.ejs') %>
+
+
+
+    <section class="breadcrumb-section set-bg"
+        data-setbg="https://images.herzindagi.info/image/2023/Oct/ornamental-plants-at-home.jpg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb__text">
+                        <h2>Wishlist</h2>
+                        <div class="breadcrumb__option">
+                            <a href="/products">Products</a>
+                            <span>Wishlist</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="shoping-cart spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="shoping__cart__table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="shoping__product">Products</th>
+                                    <th>Price</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (wishlist && wishlist.length> 0) { %>
+                                    <% wishlist.forEach(item=> { %>
+                                        <% const discountPercentage=((item.product.originalprice -
+                                            item.product.discountprice) / item.product.originalprice * 100).toFixed(2);
+                                            %>
+                                            <tr data-id="<%= item.product.id %>">
+                                                <td class="shoping__cart__item">
+                                                    <a href="/product-detail?id=<%= item.product._id %>"><img
+                                                            src="/images/<%= item.product.image[0] %>" alt=""></a>
+                                                    <h5>
+                                                        <%= item.product.name %>
+                                                    </h5>
+                                                </td>
+                                                <td class="shoping__cart__price">
+                                                    <s style="color: red;">
+                                                        <%= item.product.originalprice %>
+                                                    </s>
+                                                    <%= item.product.discountprice %> <span class="dicount-percentage">(
+                                                            <%= discountPercentage %>%)</span>
+                                                </td>
+                                                <td>
+                                                    <% const isInCart=items.some(cartItem=>
+                                                        cartItem.product._id.toString() ===
+                                                        item.product._id.toString()); %>
+                                                        <% if (isInCart) { %>
+                                                            <button class="btn btn-secondary" disabled>Item in
+                                                                Cart</button>
+                                                            <% } else { %>
+                                                                <form class="add-to-cart-form"
+                                                                    data-product-id="<%= item.product._id %>">
+                                                                    <button type="button"
+                                                                        class="btn text-white add-to-cart-btn"
+                                                                        style="background-color:#204f38;">Add to
+                                                                        Cart</button>
+                                                                </form>
+                                                                <% } %>
+                                                </td>
+                                                <td class="shoping__cart__item__close">
+                                                    <form class="remove-from-wishlist-form" action="/wishlist/remove"
+                                                        method="post">
+                                                        <input type="hidden" name="productId"
+                                                            value="<%= item.product._id %>">
+                                                        <span class="remove-items icon_close"
+                                                            data-id="<%= item.product.id %>"></span>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            <% }) %>
+                                                <% } else { %>
+                                                    <tr>
+                                                        <td colspan="5">Your wishlist is empty</td>
+                                                    </tr>
+                                                    <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="shoping__cart__btns">
+                        <a href="/products" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
+                        <a href="#" class="primary-btn cart-btn cart-btn-right"><span class="icon_loading"></span>
+                            Update Cart</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <%- include('../layouts/footer.ejs') %>
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    const form = button.closest('form');
+                    const productId = form.getAttribute('data-product-id');
+
+                    Swal.fire({
+                        title: 'Add to Cart',
+                        text: 'Are you sure you want to add this item to your cart?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, add it!',
+                        confirmButtonColor: '#204f38',
+                        cancelButtonText: 'No, cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            fetch('/add-to-cart', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({ productId: productId })
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.message) {
+                                        Swal.fire({
+                                            title: 'Success',
+                                            text: data.message,
+                                            icon: 'success',
+                                            confirmButtonText: 'OK',
+                                            confirmButtonColor: '#204f38',
+                                        }).then(() => {
+                                            window.location.reload(); // Reload the wishlist page
+                                        });
+                                    } else {
+                                        Swal.fire('Error', 'Failed to add product to cart', 'error');
+                                    }
+                                })
+                                .catch(error => {
+                                    Swal.fire('Error', 'Failed to add product to cart', 'error');
+                                });
+                        }
+                    });
+                });
+            });
+
+            document.querySelectorAll('.remove-items').forEach(button => {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    const form = button.closest('form');
+                    const productId = form.querySelector('input[name="productId"]').value;
+                    const row = button.closest('tr'); // Ensure you are targeting the correct row
+
+                    Swal.fire({
+                        title: 'Remove Item',
+                        text: 'Are you sure you want to remove this item from your wishlist?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, remove it!',
+                        cancelButtonText: 'No, cancel',
+                        confirmButtonColor: '#204f38',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            fetch('/wishlist/remove', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({ productId })
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.message === 'Item removed from wishlist') {
+                                        row.remove(); // Remove the item row from the DOM
+                                        Swal.fire({
+                                            title: 'Removed!',
+                                            icon: 'success',
+                                            text: 'The item has been removed from your wishlist.',
+
+                                            confirmButtonColor: '#204f38',
+
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Oops...',
+                                            text: data.message,
+                                        });
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    Swal.fire('Error', 'Failed to remove item from wishlist', 'error');
+                                });
+                        }
+                    });
+                });
+            });
+
+        </script>

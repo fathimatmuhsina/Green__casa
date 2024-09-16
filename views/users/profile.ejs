@@ -1,0 +1,162 @@
+<%- include('../layouts/detailheader.ejs') %>
+
+
+    <div class="row">
+        <div class="col">
+            <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="/home">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Profile</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="container">
+                    <% if (messages.success_msg) { %>
+                      <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <%= messages.success_msg %>
+                      </div>
+                    <% } %>
+                    <!-- Rest of your profile page code -->
+                  </div>
+                <div class="card mb-4 text-center">
+                    <div class="card-body">
+                        <% if (user.image) { %>
+                            <img src="images/<%= user.image %>" alt="avatar" class="rounded-circle img-fluid"
+                                style="width: 150px;">
+                            <% } else { %>
+                                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+                                    alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+                                <% } %>
+                                    <h5 class="my-3">
+                                        <%= user.name %>
+                                    </h5>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <p class="mb-0">Email</p>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <p class="text-muted mb-0">
+                                                <%= user.email %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <p class="mb-0">Mobile</p>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <p class="text-muted mb-0">
+                                                <%= user.mobile %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="text-center flex-grow-1 mb-0">Addresses</h5>
+                            <a href="/add-address?id=<%= user._id %>" class="btn btn-custom">
+                                <i class="fa fa-plus" data-bs-toggle="tooltip" title="Add new address"></i>
+                            </a>
+                        </div>
+                        <ul class="list-group">
+                            <% if (user.address && user.address.length> 0) { %>
+                                <% user.address.forEach(address=> { %>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="address-details flex-grow-1">
+                                            <%= address.housename %>, <%= address.street %>, <%= address.city %>, <%=
+                                                            address.state %>, <%= address.zipcode %>, <%=
+                                                                    address.country %> - <%= address.mobile %>
+                                        </div>
+                                        <div class="address-actions d-flex">
+                                            <a href="/edit-address?id=<%= user._id %>&address_id=<%= address._id %>"
+                                                class="btn btn-sm me-2" title="Edit address"><i
+                                                    class="fa-solid fa-pen-to-square"></i></a>
+                                            <form id="delete-form-<%= address._id %>" action="/delete-address"
+                                                method="post" class="d-inline">
+                                                <input type="hidden" name="user_id" value="<%= user._id %>">
+                                                <input type="hidden" name="address_id" value="<%= address._id %>">
+                                                <button type="button" class="btn btn-danger btn-sm delete-address"
+                                                    data-address-id="<%= address._id %>" title="Delete Address"><i
+                                                        class="fa-solid fa-trash"></i></button>
+                                            </form>
+                                        </div>
+                                    </li>
+                                    <% }) %>
+                                        <% } else { %>
+                                            <p>No addresses found.</p>
+                                            <% } %>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="text-center">
+                            <a href="/edit-profile?id=<%= user._id %>" class="btn text-white"
+                                style="background-color: #204f38;">Edit Profile</a>
+                            <a href="/change-password" class="btn text-white" style="background-color: #204f38;">Change
+                                Password</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.delete-address').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const addressId = button.getAttribute('data-address-id');
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#204f38',
+
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                title: 'Success',
+                                text: "Address Deleted Successfully",
+                                icon: 'success',
+                                confirmButtonColor: '#204f38',
+
+                            }).then(() => {
+                                document.getElementById(`delete-form-${addressId}`).submit();
+
+                            })
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.nice-select.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery.slicknav.js"></script>
+    <script src="js/mixitup.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/main.js"></script>
+    </body>
+
+    </html>

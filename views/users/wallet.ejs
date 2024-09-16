@@ -1,0 +1,110 @@
+<%- include('../layouts/detailheader.ejs') %>
+
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-2">
+        <div class="card text-white mb-2 shadow-sm" style="background-color: #1a593a;">
+          <div class="card-body">
+            <h4 class="card-title text-center">Wallet Balance</h4>
+            <h4 class="card-text text-center">₹<%= walletBalance %>
+            </h4>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <h3 class="mb-4">Transaction History</h3>
+        <div class="table-responsive shadow-sm">
+          <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Type</th>
+                <th scope="col">Credit (₹)</th>
+                <th scope="col">Debit (₹)</th>
+                <th scope="col">Balance (₹)</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <% if (transactions.length> 0) {
+                let runningBalance = parseFloat(walletBalance); // Initialize with current wallet balance
+                %>
+                <% transactions.forEach(transaction=> {
+                  if (transaction.type === 'debit') {
+                  runningBalance -= parseFloat(transaction.amount);
+                  } else if (transaction.type === 'refund') {
+                  runningBalance += parseFloat(transaction.amount);
+                  } else if (transaction.type === 'credit') {
+                  runningBalance += parseFloat(transaction.amount);
+                  }
+                  %>
+                  <tr>
+                    <td>
+                      <%= new Date(transaction.date).toLocaleDateString('en-GB') %>
+                    </td>
+                    <td class="<%= transaction.type === 'debit' ? 'text-danger' : 'text-success' %>">
+                      <%= transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1) %>
+                    </td>
+                    <td class="text-success">
+                      <%= transaction.type==='credit' || transaction.type==='refund' ? transaction.amount.toFixed(2)
+                        : '-' %>
+                    </td>
+                    <td class="text-danger">
+                      <%= transaction.type==='debit' ? transaction.amount.toFixed(2) : '-' %>
+                    </td>
+                    <td>
+                      <%= transaction.description %>
+                    </td>
+                  </tr>
+                  <% }) %>
+                    <% } else { %>
+                      <tr>
+                        <td colspan="6" class="text-center">No transactions found</td>
+                      </tr>
+                      <% } %>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination Controls -->
+        <nav aria-label="Page navigation">
+          <ul class="pagination justify-content-center mt-4">
+            <% if (currentPage> 1) { %>
+              <li class="page-item">
+                <a class="page-link" href="?page=<%= currentPage - 1 %>" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <% } else { %>
+                <li class="page-item disabled">
+                  <span class="page-link">&laquo;</span>
+                </li>
+                <% } %>
+
+                  <% for (let i=1; i <=totalPages; i++) { %>
+                    <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                      <a class="page-link" href="?page=<%= i %>">
+                        <%= i %>
+                      </a>
+                    </li>
+                    <% } %>
+
+                      <% if (currentPage < totalPages) { %>
+                        <li class="page-item">
+                          <a class="page-link" href="?page=<%= currentPage + 1 %>" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                          </a>
+                        </li>
+                        <% } else { %>
+                          <li class="page-item disabled">
+                            <span class="page-link">&raquo;</span>
+                          </li>
+                          <% } %>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <%- include('../layouts/footer.ejs') %>

@@ -1,0 +1,199 @@
+<%- include('../layouts/adminheader.ejs') %>
+
+  <div class="col-lg-12">
+    <div class="col-lg-12 " style="background-color: #fff6f4;">
+
+      <div class="container pt-3">
+        <div class="row">
+
+
+          <div class="col-lg-9">
+            <h3>Products</h3>
+
+          </div>
+          <div class="col-lg-3">
+            <input type="text" id="productSearch" placeholder="Search Products..." onkeyup="searchProducts()"
+              style="width: 70%; padding: 5px; margin-bottom: 20px;">
+          </div>
+        </div>
+      </div>
+    </div>
+    <nav class="container py-4">
+
+
+      <table class="table table-striped">
+        <thead class="tablehead">
+          <tr>
+            <th scope="col">No</th>
+            <th scope="col-1">Image</th>
+            <th scope="col-2">Name</th>
+            <th scope="col-1">Category</th>
+            <th scope="col-1">Original Price</th>
+            <th scope="col-1">Discount Price</th>
+            <th scope="col-1">Stock</th>
+            <th scope="col-2">Status</th>
+
+            <th scope="col-1"><a href="/admin/add-products"><i class="fa-solid fa-plus text-white"
+                  title="Add Product"></i></a></th>
+          </tr>
+        </thead>
+        <tbody class="tablebody">
+          <% if (products.length> 0) { %>
+            <% products.forEach((product, index)=> { %>
+              <tr>
+                <td scope="row">
+                  <%= (currentPage - 1) * limit + index + 1 %>
+                </td>
+                <td>
+                  <% if (product.image.length> 0) { %>
+                    <img src="/images/<%= product.image[0] %>" alt="Product Image" style="width: 50px; height: 50px;"
+                      onerror="this.onerror=null; this.src='/images/default.jpg';">
+                    <% } else { %>
+                      <img src="/images/default.jpg" alt="Default Image" style="width: 50px; height: 50px;">
+                      <% } %>
+                </td>
+                <td>
+                  <%= product.name %>
+                </td>
+                <td>
+                  <%= product.category %>
+                </td>
+                <td>
+                  <%= product.originalprice %>
+                </td>
+                <td>
+                  <%= product.discountprice %>
+                </td>
+                <td>
+                  <%= product.stock %>
+                </td>
+                <td>
+                  <%= product.is_listed ? 'Listed' : 'Unlisted' %>
+                </td>
+                <td>
+                  <% if (product.is_listed) { %>
+                    <a href="#" onclick="confirmUnListProduct('<%= product._id %>')"><i class="fa-solid fa-circle-check"
+                        style="color: green;" title="Unlist Product"></i></a>
+                    <% } else { %>
+                      <a href="#" onclick="confirmListProduct('<%= product._id %>')"><i class="fa-solid fa-ban"
+                          style="color: #FF003D;" title="List Product"></i></a>
+                      <% } %>
+                        <a href="/admin/view-product-details?id=<%= product._id %>"><i class="fa-solid fa-eye"
+                            style="color: #25191c;" title="View Product Details"></i></a>
+
+                </td>
+              </tr>
+              <% }) %>
+                <% } else { %>
+                  <tr>
+                    <td colspan="10">Products Not found</td>
+                  </tr>
+                  <% } %>
+        </tbody>
+      </table>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+            <a class="page-link" href="?page=<%= currentPage - 1 %>&limit=<%= limit %>">Previous</a>
+          </li>
+          <% for (let i=1; i <=totalPages; i++) { %>
+            <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+              <a class="page-link" href="?page=<%= i %>&limit=<%= limit %>">
+                <%= i %>
+              </a>
+            </li>
+            <% } %>
+              <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                <a class="page-link" href="?page=<%= currentPage + 1 %>&limit=<%= limit %>">Next</a>
+              </li>
+        </ul>
+      </nav>
+    </nav>
+  </div>
+
+  <script>
+    function confirmUnListProduct(productID) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'Do you really want to unlist this product?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#204f38',
+        cancelButtonColor: 'blanchedalmond',
+        confirmButtonText: 'Yes, unlist it!',
+        cancelButtonText: '<span style="color:black;">Cancel</span>',  // Set cancel button text color to black
+
+      }).then((result) => {
+        if (result.isConfirmed) {
+
+          // Success alert after confirming
+          Swal.fire({
+            title: 'Success!',
+            text: 'Product has been unlisted successfully.',
+            icon: 'success',
+            confirmButtonColor: '#204f38',
+
+          }).then(() => {
+            window.location.href = `/admin/toggle-product-status/${productID}`;
+          });
+        }
+      });
+    }
+
+    function confirmListProduct(productID) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'Do you really want to list this Product?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#204f38',
+        cancelButtonColor: 'blanchedalmond',
+        confirmButtonText: 'Yes, list it!',
+        cancelButtonText: '<span style="color:black;">Cancel</span>',  // Set cancel button text color to black
+
+      }).then((result) => {
+        if (result.isConfirmed) {
+
+          // Success alert after confirming
+          Swal.fire({
+            title: 'Success!',
+            text: 'Product has been listed successfully.',
+            icon: 'success',
+            confirmButtonColor: '#204f38',
+
+          }).then(() => {
+            window.location.href = `/admin/toggle-product-status/${productID}`;
+          });;
+        }
+      });
+    }
+  </script>
+  <script>
+    function searchProducts() {
+      const input = document.getElementById("productSearch");
+      const filter = input.value.toLowerCase();
+      const table = document.querySelector("table");
+      const tr = table.getElementsByTagName("tr");
+
+      for (let i = 1; i < tr.length; i++) {
+        const td = tr[i].getElementsByTagName("td");
+        let found = false;
+
+        for (let j = 0; j < td.length; j++) {
+          if (td[j]) {
+            if (td[j].textContent.toLowerCase().indexOf(filter) > -1) {
+              found = true;
+              break;
+            }
+          }
+        }
+
+        if (found) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  </script>
+  <%- include('../layouts/footer.ejs') %>
